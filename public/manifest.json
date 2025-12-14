@@ -1,0 +1,46 @@
+{
+    "name": "RUBY Farm",
+    "short_name": "RUBY Farm",
+    "description": "Aplikasi manajemen peternakan kelinci dengan tracking genealogi dan keuangan",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#16a34a",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/vite.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "business",
+        "productivity",
+        "agriculture"
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "url": "/dashboard",
+            "description": "Lihat ringkasan farm"
+        },
+        {
+            "name": "Tambah Indukan",
+            "url": "/livestock",
+            "description": "Tambah kelinci indukan"
+        },
+        {
+            "name": "Tambah Anakan",
+            "url": "/offspring",
+            "description": "Tambah kelinci anakan"
+        },
+        {
+            "name": "Keuangan",
+            "url": "/finance",
+            "description": "Lacak keuangan"
+        }
+    ]
+}
