@@ -281,28 +281,7 @@ export function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Quick Links */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <a href="/livestock" className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors">
-                            <Users className="h-8 w-8 text-primary-600 mb-2" />
-                            <span className="text-sm font-medium">Indukan</span>
-                        </a>
-                        <a href="/offspring" className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors">
-                            <Baby className="h-8 w-8 text-primary-600 mb-2" />
-                            <span className="text-sm font-medium">Anakan</span>
-                        </a>
-                        <a href="/finance" className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors">
-                            <DollarSign className="h-8 w-8 text-primary-600 mb-2" />
-                            <span className="text-sm font-medium">Keuangan</span>
-                        </a>
-                        <a href="/inventory" className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors">
-                            <Package className="h-8 w-8 text-primary-600 mb-2" />
-                            <span className="text-sm font-medium">Inventori</span>
-                        </a>
-                    </div>
-                </div>
+
 
                 {/* Type Selector Modal (Indukan/Anakan) */}
                 {showTypeSelector && (
