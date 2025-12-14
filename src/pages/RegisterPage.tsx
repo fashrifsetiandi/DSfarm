@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Rabbit, Mail, Lock, User, AlertCircle, CheckCircle2 } from 'lucide-react'
@@ -29,7 +29,7 @@ function GoogleIcon({ className }: { className?: string }) {
 
 export function RegisterPage() {
     const navigate = useNavigate()
-    const { signUp, signInWithGoogle } = useAuth()
+    const { user, loading: authLoading, signUp, signInWithGoogle } = useAuth()
     const [googleLoading, setGoogleLoading] = useState(false)
     const [formData, setFormData] = useState({
         fullName: '',
@@ -39,6 +39,13 @@ export function RegisterPage() {
     })
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+
+    // Redirect to dashboard if already authenticated (handles OAuth callback)
+    useEffect(() => {
+        if (!authLoading && user) {
+            navigate('/dashboard', { replace: true })
+        }
+    }, [user, authLoading, navigate])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({

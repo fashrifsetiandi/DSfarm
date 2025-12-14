@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Rabbit, Mail, Lock, AlertCircle } from 'lucide-react'
@@ -29,12 +29,19 @@ function GoogleIcon({ className }: { className?: string }) {
 
 export function LoginPage() {
     const navigate = useNavigate()
-    const { signIn, signInWithGoogle } = useAuth()
+    const { user, loading: authLoading, signIn, signInWithGoogle } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const [googleLoading, setGoogleLoading] = useState(false)
+
+    // Redirect to dashboard if already authenticated (handles OAuth callback)
+    useEffect(() => {
+        if (!authLoading && user) {
+            navigate('/dashboard', { replace: true })
+        }
+    }, [user, authLoading, navigate])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
