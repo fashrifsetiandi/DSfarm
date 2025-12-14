@@ -153,129 +153,129 @@ export function DashboardPage() {
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Welcome */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Selamat datang di RUBY Farm, {user?.email}</p>
+                <div className="mb-6 sm:mb-8">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
+                    <p className="text-sm sm:text-base text-gray-600 mt-1">Selamat datang, {user?.email?.split('@')[0]}</p>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <Users className="h-8 w-8 text-blue-600" />
-                            <span className="text-3xl font-bold text-gray-900">{stats.livestock}</span>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-2 sm:mb-4">
+                            <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.livestock}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium">Indukan</h3>
-                        <p className="text-sm text-gray-500 mt-1">Total kelinci indukan</p>
+                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Indukan</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kelinci indukan</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <Baby className="h-8 w-8 text-pink-600" />
-                            <span className="text-3xl font-bold text-gray-900">{stats.offspring}</span>
+                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-2 sm:mb-4">
+                            <Baby className="h-6 w-6 sm:h-8 sm:w-8 text-pink-600" />
+                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.offspring}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium">Anakan</h3>
-                        <p className="text-sm text-gray-500 mt-1">Total kelinci anakan</p>
+                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Anakan</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kelinci anakan</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <Home className="h-8 w-8 text-green-600" />
-                            <span className="text-3xl font-bold text-gray-900">{stats.kandang}</span>
+                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-2 sm:mb-4">
+                            <Home className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.kandang}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium">Kandang</h3>
-                        <p className="text-sm text-gray-500 mt-1">Total kandang tersedia</p>
+                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Kandang</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kandang tersedia</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <DollarSign className="h-8 w-8 text-purple-600" />
-                            <span className={`text-3xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-2 sm:mb-4">
+                            <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
+                            <span className={`text-xl sm:text-3xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                 {balance >= 0 ? '+' : ''}
                                 {(balance / 1000000).toFixed(1)}M
                             </span>
                         </div>
-                        <h3 className="text-gray-600 font-medium">Saldo</h3>
-                        <p className="text-sm text-gray-500 mt-1">Balance keuangan</p>
+                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Saldo</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Balance keuangan</p>
                     </div>
                 </div>
 
                 {/* Financial Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow p-6">
-                        <div className="flex items-center gap-3 mb-3">
-                            <TrendingUp className="h-6 w-6 text-green-600" />
-                            <h3 className="text-lg font-semibold text-gray-900">Total Pemasukan</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                            <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">Total Pemasukan</h3>
                         </div>
-                        <p className="text-3xl font-bold text-green-600">{formatCurrency(stats.totalIncome)}</p>
+                        <p className="text-xl sm:text-3xl font-bold text-green-600">{formatCurrency(stats.totalIncome)}</p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg shadow p-6">
-                        <div className="flex items-center gap-3 mb-3">
-                            <TrendingDown className="h-6 w-6 text-red-600" />
-                            <h3 className="text-lg font-semibold text-gray-900">Total Pengeluaran</h3>
+                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg shadow p-4 sm:p-6">
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                            <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">Total Pengeluaran</h3>
                         </div>
-                        <p className="text-3xl font-bold text-red-600">{formatCurrency(stats.totalExpense)}</p>
+                        <p className="text-xl sm:text-3xl font-bold text-red-600">{formatCurrency(stats.totalExpense)}</p>
                     </div>
                 </div>
 
                 {/* Quick Add Actions */}
                 <div className="mb-8">
                     <h3 className="text-lg font-semibold mb-4">⚡ Aksi Cepat</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                         {/* Tambah Breeding */}
                         <button
                             onClick={() => handleQuickAction('breeding')}
-                            className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left"
+                            className="p-3 sm:p-6 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left"
                         >
-                            <div className="bg-blue-600 p-3 rounded-lg">
-                                <Baby className="h-6 w-6 text-white" />
+                            <div className="bg-blue-600 p-2 sm:p-3 rounded-lg">
+                                <Baby className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                             </div>
                             <div>
-                                <p className="font-semibold text-blue-900">Tambah Breeding</p>
-                                <p className="text-sm text-blue-600 mt-1">Catat perkawinan baru</p>
+                                <p className="font-semibold text-blue-900 text-sm sm:text-base">Breeding</p>
+                                <p className="text-xs sm:text-sm text-blue-600 mt-0.5 sm:mt-1 hidden sm:block">Catat perkawinan</p>
                             </div>
                         </button>
 
                         {/* Catat Kesehatan */}
                         <button
                             onClick={() => handleQuickAction('health')}
-                            className="p-6 bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left"
+                            className="p-3 sm:p-6 bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left"
                         >
-                            <div className="bg-red-600 p-3 rounded-lg">
-                                <HeartPulse className="h-6 w-6 text-white" />
+                            <div className="bg-red-600 p-2 sm:p-3 rounded-lg">
+                                <HeartPulse className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                             </div>
                             <div>
-                                <p className="font-semibold text-red-900">Riwayat Kesehatan</p>
-                                <p className="text-sm text-red-600 mt-1">Indukan / Anakan</p>
+                                <p className="font-semibold text-red-900 text-sm sm:text-base">Kesehatan</p>
+                                <p className="text-xs sm:text-sm text-red-600 mt-0.5 sm:mt-1 hidden sm:block">Indukan / Anakan</p>
                             </div>
                         </button>
 
                         {/* Catat Pertumbuhan */}
                         <button
                             onClick={() => handleQuickAction('growth')}
-                            className="p-6 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left"
+                            className="p-3 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left"
                         >
-                            <div className="bg-green-600 p-3 rounded-lg">
-                                <Scale className="h-6 w-6 text-white" />
+                            <div className="bg-green-600 p-2 sm:p-3 rounded-lg">
+                                <Scale className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                             </div>
                             <div>
-                                <p className="font-semibold text-green-900">Catat Pertumbuhan</p>
-                                <p className="text-sm text-green-600 mt-1">Indukan / Anakan</p>
+                                <p className="font-semibold text-green-900 text-sm sm:text-base">Pertumbuhan</p>
+                                <p className="text-xs sm:text-sm text-green-600 mt-0.5 sm:mt-1 hidden sm:block">Indukan / Anakan</p>
                             </div>
                         </button>
 
                         {/* Jual */}
                         <button
                             onClick={() => handleQuickAction('sell')}
-                            className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-4 text-left"
+                            className="p-3 sm:p-6 bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left"
                         >
-                            <div className="bg-orange-600 p-3 rounded-lg">
-                                <ShoppingCart className="h-6 w-6 text-white" />
+                            <div className="bg-orange-600 p-2 sm:p-3 rounded-lg">
+                                <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                             </div>
                             <div>
-                                <p className="font-semibold text-orange-900">Jual Kelinci</p>
-                                <p className="text-sm text-orange-600 mt-1">Indukan / Anakan</p>
+                                <p className="font-semibold text-orange-900 text-sm sm:text-base">Jual</p>
+                                <p className="text-xs sm:text-sm text-orange-600 mt-0.5 sm:mt-1 hidden sm:block">Indukan / Anakan</p>
                             </div>
                         </button>
                     </div>

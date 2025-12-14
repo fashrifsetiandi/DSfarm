@@ -11,44 +11,44 @@ export function LandingPage() {
                         <Rabbit className="h-8 w-8 text-primary-600" />
                         <span className="text-2xl font-bold text-primary-600">RUBY Farm</span>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 sm:gap-4">
                         <Link
                             to="/login"
-                            className="px-6 py-2 text-primary-600 hover:text-primary-700 font-medium"
+                            className="px-3 sm:px-6 py-2 text-sm sm:text-base text-primary-600 hover:text-primary-700 font-medium"
                         >
                             Masuk
                         </Link>
                         <Link
                             to="/register"
-                            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                            className="px-3 sm:px-6 py-2 text-sm sm:text-base bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium whitespace-nowrap"
                         >
-                            Daftar Gratis
+                            Daftar
                         </Link>
                     </div>
                 </div>
             </header>
 
             {/* Hero Section */}
-            <section className="container mx-auto px-4 py-20 text-center">
+            <section className="container mx-auto px-4 py-12 sm:py-20 text-center">
                 <div className="max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
                         Kelola Ternak Kelinci
-                        <span className="block text-primary-600 mt-2">Lebih Mudah & Efisien</span>
+                        <span className="block text-primary-600 mt-1 sm:mt-2">Lebih Mudah & Efisien</span>
                     </h1>
-                    <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
                         Sistem manajemen farm kelinci terlengkap. Tracking silsilah otomatis,
-                        laporan keuangan real-time, dan monitoring kesehatan dalam satu aplikasi.
+                        laporan keuangan real-time, dan monitoring kesehatan.
                     </p>
-                    <div className="flex gap-4 justify-center">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
                         <Link
                             to="/register"
-                            className="px-8 py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-lg font-semibold shadow-lg hover:shadow-xl"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl"
                         >
                             Mulai Sekarang
                         </Link>
                         <Link
                             to="/login"
-                            className="px-8 py-4 bg-white border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors text-lg font-semibold"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors text-base sm:text-lg font-semibold"
                         >
                             Login
                         </Link>
@@ -114,15 +114,15 @@ export function LandingPage() {
             </section>
 
             {/* CTA */}
-            <section className="container mx-auto px-4 py-20 text-center">
-                <div className="max-w-3xl mx-auto bg-gradient-to-r from-primary-500 to-green-600 rounded-2xl p-12 text-white shadow-2xl">
-                    <h2 className="text-3xl font-bold mb-4">Siap Kelola Farm Kelinci Anda?</h2>
-                    <p className="text-xl mb-8 text-primary-50">
+            <section className="container mx-auto px-4 py-12 sm:py-20 text-center">
+                <div className="max-w-3xl mx-auto bg-gradient-to-r from-primary-500 to-green-600 rounded-2xl p-6 sm:p-12 text-white shadow-2xl">
+                    <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Siap Kelola Farm Kelinci Anda?</h2>
+                    <p className="text-base sm:text-xl mb-6 sm:mb-8 text-primary-50">
                         Bergabung sekarang dan mulai tracking ternak kelinci Anda dengan lebih efisien.
                     </p>
                     <Link
                         to="/register"
-                        className="inline-block px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-100 transition-colors text-lg font-semibold"
+                        className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-100 transition-colors text-base sm:text-lg font-semibold"
                     >
                         Daftar Gratis Sekarang
                     </Link>

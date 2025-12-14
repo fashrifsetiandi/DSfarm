@@ -116,49 +116,49 @@ export function InventoryPage() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <h1 className="text-2xl font-bold text-gray-900 mb-6">Inventori</h1>
+            <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Inventori</h1>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white rounded-lg shadow p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <Wrench className="h-5 w-5 text-blue-600" />
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                    <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <Wrench className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Total Peralatan</p>
-                                <p className="text-xl font-bold text-gray-900">{equipment.length} item</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-xs sm:text-sm text-gray-500 truncate">Peralatan</p>
+                                <p className="text-base sm:text-xl font-bold text-gray-900">{equipment.length}</p>
                             </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600">
-                            Nilai: <span className="font-semibold">{formatCurrency(totalEquipmentValue)}</span>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600 truncate">
+                            <span className="font-semibold">{formatCurrency(totalEquipmentValue)}</span>
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                <Package className="h-5 w-5 text-green-600" />
+                    <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <Package className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Pembelian Pakan</p>
-                                <p className="text-xl font-bold text-gray-900">{feedPurchases.length} transaksi</p>
+                            <div className="min-w-0 flex-1">
+                                <p className="text-xs sm:text-sm text-gray-500 truncate">Pakan</p>
+                                <p className="text-base sm:text-xl font-bold text-gray-900">{feedPurchases.length}</p>
                             </div>
                         </div>
-                        <p className="mt-2 text-sm text-gray-600">
-                            Total: <span className="font-semibold">{formatCurrency(totalFeedPurchases)}</span>
+                        <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600 truncate">
+                            <span className="font-semibold">{formatCurrency(totalFeedPurchases)}</span>
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <Wallet className="h-5 w-5 text-purple-600" />
+                    <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <Wallet className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Total Investasi</p>
-                                <p className="text-xl font-bold text-gray-900">
+                            <div className="min-w-0 flex-1">
+                                <p className="text-xs sm:text-sm text-gray-500 truncate">Total</p>
+                                <p className="text-sm sm:text-xl font-bold text-gray-900 truncate">
                                     {formatCurrency(totalEquipmentValue + totalFeedPurchases)}
                                 </p>
                             </div>
@@ -171,35 +171,36 @@ export function InventoryPage() {
                     <div className="flex border-b">
                         <button
                             onClick={() => setActiveTab('equipment')}
-                            className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'equipment'
+                            className={`flex-1 px-2 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 border-b-2 transition-colors ${activeTab === 'equipment'
                                 ? 'border-blue-600 text-blue-600 bg-blue-50'
                                 : 'border-transparent text-gray-500 hover:text-gray-700'
                                 }`}
                         >
-                            <Wrench className="h-4 w-4" />
-                            Peralatan ({equipment.length})
+                            <Wrench className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">Peralatan</span> ({equipment.length})
                         </button>
                         <button
                             onClick={() => setActiveTab('feed')}
-                            className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 border-b-2 transition-colors ${activeTab === 'feed'
+                            className={`flex-1 px-2 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-2 border-b-2 transition-colors ${activeTab === 'feed'
                                 ? 'border-green-600 text-green-600 bg-green-50'
                                 : 'border-transparent text-gray-500 hover:text-gray-700'
                                 }`}
                         >
-                            <Package className="h-4 w-4" />
-                            Pembelian Pakan ({feedPurchases.length})
+                            <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                            <span className="hidden sm:inline">Pembelian</span> Pakan ({feedPurchases.length})
                         </button>
                     </div>
 
                     {/* Add Button */}
-                    <div className="p-4 border-b">
+                    <div className="p-3 sm:p-4 border-b">
                         <button
                             onClick={() => activeTab === 'equipment' ? setShowEquipmentForm(true) : setShowFeedForm(true)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium ${activeTab === 'equipment' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'
+                            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-white text-sm sm:text-base font-medium ${activeTab === 'equipment' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'
                                 }`}
                         >
                             <Plus className="h-4 w-4" />
-                            {activeTab === 'equipment' ? 'Tambah Peralatan' : 'Tambah Pembelian Pakan'}
+                            <span className="hidden sm:inline">{activeTab === 'equipment' ? 'Tambah Peralatan' : 'Tambah Pembelian Pakan'}</span>
+                            <span className="sm:hidden">Tambah</span>
                         </button>
                     </div>
 

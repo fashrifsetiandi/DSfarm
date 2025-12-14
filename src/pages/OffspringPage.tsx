@@ -122,17 +122,18 @@ export function OffspringPage() {
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="flex justify-between items-start mb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Anakan</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Anakan</h1>
                         <p className="text-gray-600 text-sm mt-1">Lihat dan kelola data kelinci anakan</p>
                     </div>
                     <button
                         onClick={() => setShowBatchSell(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-orange-600 text-white text-sm sm:text-base rounded-lg hover:bg-orange-700"
                     >
                         <DollarSign className="h-4 w-4" />
-                        Jual Batch
+                        <span className="hidden sm:inline">Jual Batch</span>
+                        <span className="sm:hidden">Batch</span>
                     </button>
                 </div>
 
@@ -149,42 +150,42 @@ export function OffspringPage() {
                 </div>
 
                 {/* Stats Cards - Clickable Tab Filters */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
                     {/* Di Farm Card */}
                     <div
                         onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Di Farm</p>
-                        <p className="text-3xl font-bold text-green-600">{infarmCount}</p>
-                        <div className="flex gap-2 flex-wrap mt-3 pt-3 border-t border-gray-100">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Di Farm</p>
+                        <p className="text-xl sm:text-3xl font-bold text-green-600">{infarmCount}</p>
+                        <div className="flex gap-1 sm:gap-2 flex-wrap mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('anakan'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'anakan'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'anakan'
                                     ? 'bg-yellow-500 text-white'
                                     : 'text-yellow-600 hover:bg-yellow-50'
                                     }`}
                             >
-                                Anakan {statusCounts.anakan}
+                                <span className="hidden sm:inline">Anakan</span> {statusCounts.anakan}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('pertumbuhan'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'pertumbuhan'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'pertumbuhan'
                                     ? 'bg-blue-500 text-white'
                                     : 'text-blue-600 hover:bg-blue-50'
                                     }`}
                             >
-                                Pertumbuhan {statusCounts.pertumbuhan}
+                                <span className="hidden sm:inline">Tumbuh</span> {statusCounts.pertumbuhan}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('siap_jual'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'siap_jual'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'siap_jual'
                                     ? 'bg-green-500 text-white'
                                     : 'text-green-600 hover:bg-green-50'
                                     }`}
                             >
-                                Siap Jual {statusCounts.siap_jual}
+                                <span className="hidden sm:inline">Siap</span> {statusCounts.siap_jual}
                             </button>
                         </div>
                     </div>
@@ -192,33 +193,33 @@ export function OffspringPage() {
                     {/* Keluar Card */}
                     <div
                         onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Keluar</p>
-                        <p className="text-3xl font-bold text-red-600">{keluarCount}</p>
-                        <div className="flex gap-2 flex-wrap mt-3 pt-3 border-t border-gray-100">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Keluar</p>
+                        <p className="text-xl sm:text-3xl font-bold text-red-600">{keluarCount}</p>
+                        <div className="flex gap-1 sm:gap-2 flex-wrap mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
                                     ? 'bg-orange-500 text-white'
                                     : 'text-orange-600 hover:bg-orange-50'
                                     }`}
                             >
-                                Terjual {statusCounts.terjual}
+                                Jual {statusCounts.terjual}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('promosi'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'promosi'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'promosi'
                                     ? 'bg-purple-500 text-white'
                                     : 'text-purple-600 hover:bg-purple-50'
                                     }`}
                             >
-                                Promosi {statusCounts.promosi}
+                                <span className="hidden sm:inline">Promosi</span><span className="sm:hidden">Pro</span> {statusCounts.promosi}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
+                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
                                     ? 'bg-gray-500 text-white'
                                     : 'text-gray-600 hover:bg-gray-50'
                                     }`}
@@ -231,14 +232,13 @@ export function OffspringPage() {
                     {/* Total Anakan Card */}
                     <button
                         onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Total Anakan</p>
-                        <p className="text-3xl font-bold text-primary-600">{offspring.length}</p>
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                            <p className="text-xs text-gray-500">Total Record</p>
-                            <p className="text-sm font-semibold text-gray-700">{offspring.length}</p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total</p>
+                        <p className="text-xl sm:text-3xl font-bold text-primary-600">{offspring.length}</p>
+                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
+                            <p className="text-xs text-gray-500">Semua</p>
                         </div>
                     </button>
                 </div>

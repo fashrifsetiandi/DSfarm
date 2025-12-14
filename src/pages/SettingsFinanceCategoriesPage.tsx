@@ -152,25 +152,26 @@ export function SettingsFinanceCategoriesPage() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Kategori Keuangan</h1>
-                    <p className="text-gray-600 text-sm mt-1">Kelola kategori pemasukan dan pengeluaran</p>
+                    <h1 className="text-lg sm:text-2xl font-bold text-gray-900">Kategori Keuangan</h1>
+                    <p className="text-gray-600 text-xs sm:text-sm mt-1">Kelola kategori pemasukan dan pengeluaran</p>
                 </div>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                    className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white text-sm sm:text-base rounded-lg hover:bg-primary-700"
                 >
                     <Plus className="h-4 w-4" />
-                    Tambah Kategori
+                    <span className="hidden sm:inline">Tambah Kategori</span>
+                    <span className="sm:hidden">Tambah</span>
                 </button>
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex gap-2 border-b border-gray-200">
+            <div className="flex gap-1 sm:gap-2 border-b border-gray-200 overflow-x-auto">
                 <button
                     onClick={() => setFilter('all')}
-                    className={`px-4 py-2 font-medium ${filter === 'all'
+                    className={`px-2 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${filter === 'all'
                         ? 'border-b-2 border-primary-600 text-primary-600'
                         : 'text-gray-600 hover:text-gray-900'
                         }`}
@@ -179,21 +180,23 @@ export function SettingsFinanceCategoriesPage() {
                 </button>
                 <button
                     onClick={() => setFilter('income')}
-                    className={`px-4 py-2 font-medium ${filter === 'income'
+                    className={`px-2 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${filter === 'income'
                         ? 'border-b-2 border-green-600 text-green-600'
                         : 'text-gray-600 hover:text-gray-900'
                         }`}
                 >
-                    Pemasukan ({categories.filter((c) => c.transaction_type === 'income').length})
+                    <span className="hidden sm:inline">Pemasukan</span>
+                    <span className="sm:hidden">Masuk</span> ({categories.filter((c) => c.transaction_type === 'income').length})
                 </button>
                 <button
                     onClick={() => setFilter('expense')}
-                    className={`px-4 py-2 font-medium ${filter === 'expense'
+                    className={`px-2 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${filter === 'expense'
                         ? 'border-b-2 border-red-600 text-red-600'
                         : 'text-gray-600 hover:text-gray-900'
                         }`}
                 >
-                    Pengeluaran ({categories.filter((c) => c.transaction_type === 'expense').length})
+                    <span className="hidden sm:inline">Pengeluaran</span>
+                    <span className="sm:hidden">Keluar</span> ({categories.filter((c) => c.transaction_type === 'expense').length})
                 </button>
             </div>
 

@@ -130,17 +130,18 @@ export function KandangPage() {
         <div className="p-4 md:p-6">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Manajemen Kandang</h1>
-                        <p className="text-gray-600">Total {kandangs.length} kandang</p>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Manajemen Kandang</h1>
+                        <p className="text-sm sm:text-base text-gray-600">Total {kandangs.length} kandang</p>
                     </div>
                     <button
                         onClick={() => setShowAddForm(true)}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white text-sm sm:text-base rounded-lg hover:bg-primary-700 transition-colors"
                     >
-                        <Plus className="h-5 w-5" />
-                        <span>Tambah Kandang</span>
+                        <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <span className="hidden sm:inline">Tambah Kandang</span>
+                        <span className="sm:hidden">Tambah</span>
                     </button>
                 </div>
 
@@ -431,8 +432,8 @@ function KandangDetailModal({ kandang, onClose }: {
                                         </div>
                                     </div>
                                     <span className={`px-2 py-1 text-xs rounded-full ${animal.type === 'livestock'
-                                            ? 'bg-purple-100 text-purple-700'
-                                            : 'bg-orange-100 text-orange-700'
+                                        ? 'bg-purple-100 text-purple-700'
+                                        : 'bg-orange-100 text-orange-700'
                                         }`}>
                                         {animal.type === 'livestock' ? 'Indukan' : 'Anakan'}
                                     </span>

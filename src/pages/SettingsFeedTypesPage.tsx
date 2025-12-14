@@ -159,17 +159,18 @@ export function SettingsFeedTypesPage() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Jenis Pakan</h1>
-                    <p className="text-gray-600 text-sm mt-1">Kelola data jenis pakan kelinci</p>
+                    <h1 className="text-lg sm:text-2xl font-bold text-gray-900">Jenis Pakan</h1>
+                    <p className="text-gray-600 text-xs sm:text-sm mt-1">Kelola data jenis pakan kelinci</p>
                 </div>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                    className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white text-sm sm:text-base rounded-lg hover:bg-primary-700"
                 >
                     <Plus className="h-4 w-4" />
-                    Tambah Jenis Pakan
+                    <span className="hidden sm:inline">Tambah Jenis Pakan</span>
+                    <span className="sm:hidden">Tambah</span>
                 </button>
             </div>
 

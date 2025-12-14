@@ -116,25 +116,27 @@ export function LivestockPage() {
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Indukan</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Indukan</h1>
                         <p className="text-gray-600 text-sm mt-1">Kelola data kelinci indukan</p>
                     </div>
                     <div className="flex gap-2">
                         <button
                             onClick={() => setShowBatchSell(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-orange-600 text-white text-sm sm:text-base rounded-lg hover:bg-orange-700"
                         >
                             <DollarSign className="h-4 w-4" />
-                            Jual Batch
+                            <span className="hidden sm:inline">Jual Batch</span>
+                            <span className="sm:hidden">Batch</span>
                         </button>
                         <button
                             onClick={() => setShowAddForm(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white text-sm sm:text-base rounded-lg hover:bg-primary-700"
                         >
                             <Plus className="h-4 w-4" />
-                            Tambah Indukan
+                            <span className="hidden sm:inline">Tambah Indukan</span>
+                            <span className="sm:hidden">Tambah</span>
                         </button>
                     </div>
                 </div>
@@ -154,35 +156,35 @@ export function LivestockPage() {
                 </div>
 
                 {/* Stats Cards - Clickable Tab Filters */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
                     {/* Di Farm Card */}
                     <div
                         onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Di Farm</p>
-                        <p className="text-3xl font-bold text-green-600">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Di Farm</p>
+                        <p className="text-xl sm:text-3xl font-bold text-green-600">
                             {livestock.filter((l) => l.status_farm === 'infarm').length}
                         </p>
-                        <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+                        <div className="flex gap-2 sm:gap-4 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100 flex-wrap">
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('jantan'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'jantan'
+                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'jantan'
                                     ? 'bg-blue-500 text-white'
                                     : 'text-blue-600 hover:bg-blue-50'
                                     }`}
                             >
-                                Jantan {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'jantan').length}
+                                ♂ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'jantan').length}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('betina'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'betina'
+                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'betina'
                                     ? 'bg-pink-500 text-white'
                                     : 'text-pink-600 hover:bg-pink-50'
                                     }`}
                             >
-                                Betina {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'betina').length}
+                                ♀ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'betina').length}
                             </button>
                         </div>
                     </div>
@@ -190,26 +192,26 @@ export function LivestockPage() {
                     {/* Keluar Card */}
                     <div
                         onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Keluar</p>
-                        <p className="text-3xl font-bold text-red-600">
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Keluar</p>
+                        <p className="text-xl sm:text-3xl font-bold text-red-600">
                             {livestock.filter((l) => l.status_farm !== 'infarm').length}
                         </p>
-                        <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+                        <div className="flex gap-2 sm:gap-4 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100 flex-wrap">
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
+                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
                                     ? 'bg-orange-500 text-white'
                                     : 'text-orange-600 hover:bg-orange-50'
                                     }`}
                             >
-                                Terjual {livestock.filter((l) => l.status_farm === 'terjual').length}
+                                Jual {livestock.filter((l) => l.status_farm === 'terjual').length}
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
+                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
                                     ? 'bg-gray-500 text-white'
                                     : 'text-gray-600 hover:bg-gray-50'
                                     }`}
@@ -222,16 +224,13 @@ export function LivestockPage() {
                     {/* Total Indukan Card */}
                     <button
                         onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
-                        className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
+                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
                             }`}
                     >
-                        <p className="text-sm font-medium text-gray-600 mb-1">Total Indukan</p>
-                        <p className="text-3xl font-bold text-primary-600">{livestock.length}</p>
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                            <p className="text-xs text-gray-500">Total Record</p>
-                            <p className="text-sm font-semibold text-gray-700">
-                                {livestock.length}
-                            </p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total</p>
+                        <p className="text-xl sm:text-3xl font-bold text-primary-600">{livestock.length}</p>
+                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
+                            <p className="text-xs text-gray-500">Semua Record</p>
                         </div>
                     </button>
                 </div>

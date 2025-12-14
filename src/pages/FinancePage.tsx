@@ -260,42 +260,43 @@ export function FinancePage() {
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Keuangan</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Keuangan</h1>
                         <p className="text-gray-600 text-sm mt-1">Kelola transaksi pemasukan dan pengeluaran</p>
                     </div>
                     <button
                         onClick={() => setShowForm(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white text-sm sm:text-base rounded-lg hover:bg-primary-700"
                     >
                         <Plus className="h-4 w-4" />
-                        Tambah Transaksi
+                        <span className="hidden sm:inline">Tambah Transaksi</span>
+                        <span className="sm:hidden">Tambah</span>
                     </button>
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-6">
                     <StatCard
-                        icon={<DollarSign className="h-5 w-5 text-gray-600" />}
+                        icon={<DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />}
                         label="Saldo"
                         value={formatCurrency(stats.balance)}
                         valueColor={stats.balance >= 0 ? 'text-green-600' : 'text-red-600'}
                     />
                     <StatCard
-                        icon={<TrendingUp className="h-5 w-5 text-green-600" />}
+                        icon={<TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />}
                         label="Pemasukan"
                         value={formatCurrency(stats.income)}
                         valueColor="text-green-600"
                     />
                     <StatCard
-                        icon={<TrendingDown className="h-5 w-5 text-red-600" />}
+                        icon={<TrendingDown className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />}
                         label="Pengeluaran"
                         value={formatCurrency(stats.expense)}
                         valueColor="text-red-600"
                     />
                     <StatCard
-                        icon={<Calendar className="h-5 w-5 text-gray-600" />}
+                        icon={<Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />}
                         label="Transaksi"
                         value={stats.count.toString()}
                         valueColor="text-gray-900"
@@ -368,18 +369,18 @@ export function FinancePage() {
                 )}
 
                 {/* Filters */}
-                <div className="bg-white rounded-lg shadow p-4 mb-6">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-lg shadow p-3 sm:p-4 mb-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
                         {/* Search */}
-                        <div className="md:col-span-2">
+                        <div className="col-span-2">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="text"
-                                    placeholder="Cari transaksi..."
+                                    placeholder="Cari..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                    className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 />
                             </div>
                         </div>
@@ -387,7 +388,7 @@ export function FinancePage() {
                         <select
                             value={filterPeriod}
                             onChange={(e) => setFilterPeriod(e.target.value as PeriodFilter)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="px-2 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                         >
                             {periodOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -397,11 +398,11 @@ export function FinancePage() {
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value as any)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="px-2 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                         >
-                            <option value="all">Semua Tipe</option>
-                            <option value="income">Pemasukan</option>
-                            <option value="expense">Pengeluaran</option>
+                            <option value="all">Semua</option>
+                            <option value="income">Masuk</option>
+                            <option value="expense">Keluar</option>
                         </select>
                     </div>
                 </div>
@@ -508,12 +509,12 @@ function StatCard({ icon, label, value, valueColor }: {
     valueColor: string
 }) {
     return (
-        <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center gap-2 mb-2">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                 {icon}
-                <p className="text-sm text-gray-600">{label}</p>
+                <p className="text-xs sm:text-sm text-gray-600">{label}</p>
             </div>
-            <p className={`text-xl md:text-2xl font-bold ${valueColor}`}>{value}</p>
+            <p className={`text-base sm:text-xl md:text-2xl font-bold ${valueColor} truncate`}>{value}</p>
         </div>
     )
 }
