@@ -108,9 +108,8 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
         ? currentOption.shortLabel
         : currentOption.label
 
-    // Stop all events from propagating to parent
-    const stopAllEvents = useCallback((e: React.SyntheticEvent) => {
-        e.preventDefault()
+    // Stop propagation only - don't prevent default on container (breaks Safari scrolling)
+    const stopPropagation = useCallback((e: React.SyntheticEvent) => {
         e.stopPropagation()
     }, [])
 
@@ -118,10 +117,10 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
         <div
             className="relative"
             ref={dropdownRef}
-            onClick={stopAllEvents}
-            onTouchStart={stopAllEvents}
-            onTouchEnd={stopAllEvents}
-            onPointerDown={stopAllEvents}
+            onClick={stopPropagation}
+            onTouchStart={stopPropagation}
+            onTouchEnd={stopPropagation}
+            style={{ touchAction: 'manipulation' }}
         >
             <button
                 ref={buttonRef}
@@ -131,9 +130,14 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
                     e.stopPropagation()
                     toggleDropdown()
                 }}
+                onTouchEnd={(e) => {
+                    // Safari iOS needs this
+                    e.stopPropagation()
+                }}
                 disabled={disabled}
                 className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border transition-all whitespace-nowrap ${currentOption.bgColor
                     } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-md active:scale-95'}`}
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
                 <span className={currentOption.color}>{currentOption.icon}</span>
                 <span className="text-xs font-medium">{displayLabel}</span>
@@ -144,9 +148,9 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
                 <div
                     className="fixed z-[9999] w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1"
                     style={{ top: menuPosition.top, left: menuPosition.left }}
-                    onClick={stopAllEvents}
-                    onTouchStart={stopAllEvents}
-                    onTouchEnd={stopAllEvents}
+                    onClick={stopPropagation}
+                    onTouchStart={stopPropagation}
+                    onTouchEnd={stopPropagation}
                 >
                     {options.map((option) => (
                         <button
@@ -157,8 +161,12 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
                                 e.stopPropagation()
                                 handleOptionClick(option.value)
                             }}
+                            onTouchEnd={(e) => {
+                                e.stopPropagation()
+                            }}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors ${option.value === value ? 'bg-gray-50' : ''
                                 }`}
+                            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                         >
                             <span className={option.color}>{option.icon}</span>
                             <span className="text-sm text-gray-700">{option.label}</span>
@@ -169,4 +177,5 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
         </div>
     )
 }
+
 
