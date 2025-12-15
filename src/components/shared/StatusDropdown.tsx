@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { ChevronDown, Home, XCircle, ShoppingCart, Zap, Heart, Baby, Clock, TrendingUp, Target } from 'lucide-react'
 import { useClickOutside } from '@/hooks/useClickOutside'
 
@@ -90,39 +90,47 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
         }
     }, [isOpen])
 
-    // Handle button click - prevents event bubbling
-    const handleButtonClick = (e: React.MouseEvent | React.TouchEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
+    // Toggle dropdown - memoized to prevent recreating
+    const toggleDropdown = useCallback(() => {
         if (!disabled) {
-            setIsOpen(!isOpen)
+            setIsOpen(prev => !prev)
         }
-    }
+    }, [disabled])
 
     // Handle option select
-    const handleOptionClick = (optionValue: string, e: React.MouseEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const handleOptionClick = useCallback((optionValue: string) => {
         onChange(optionValue)
         setIsOpen(false)
-    }
+    }, [onChange])
 
     // Determine which label to show
     const displayLabel = compact && currentOption.shortLabel
         ? currentOption.shortLabel
         : currentOption.label
 
+    // Stop all events from propagating to parent
+    const stopAllEvents = useCallback((e: React.SyntheticEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+    }, [])
+
     return (
         <div
             className="relative"
             ref={dropdownRef}
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
+            onClick={stopAllEvents}
+            onTouchStart={stopAllEvents}
+            onTouchEnd={stopAllEvents}
+            onPointerDown={stopAllEvents}
         >
             <button
                 ref={buttonRef}
-                onClick={handleButtonClick}
-                onTouchEnd={handleButtonClick}
+                type="button"
+                onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    toggleDropdown()
+                }}
                 disabled={disabled}
                 className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border transition-all whitespace-nowrap ${currentOption.bgColor
                     } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-md active:scale-95'}`}
@@ -136,11 +144,19 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
                 <div
                     className="fixed z-[9999] w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1"
                     style={{ top: menuPosition.top, left: menuPosition.left }}
+                    onClick={stopAllEvents}
+                    onTouchStart={stopAllEvents}
+                    onTouchEnd={stopAllEvents}
                 >
                     {options.map((option) => (
                         <button
                             key={option.value}
-                            onClick={(e) => handleOptionClick(option.value, e)}
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                handleOptionClick(option.value)
+                            }}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors ${option.value === value ? 'bg-gray-50' : ''
                                 }`}
                         >
