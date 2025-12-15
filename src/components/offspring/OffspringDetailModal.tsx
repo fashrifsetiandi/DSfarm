@@ -224,99 +224,102 @@ export function OffspringDetailModal({ offspringId, onClose }: OffspringDetailMo
                     </div>
                 </div>
             )}
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50">
+                {/* Modal - Full screen on mobile, centered on desktop */}
+                <div className="bg-white w-full h-[95vh] sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:mx-4 sm:rounded-xl shadow-2xl flex flex-col rounded-t-2xl sm:rounded-xl">
                     {/* Header */}
-                    <div className="px-6 py-5 border-b border-gray-200 flex-shrink-0">
+                    <div className="px-3 xs:px-4 sm:px-6 py-3 sm:py-5 border-b border-gray-200 flex-shrink-0">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <h2 className="text-2xl font-bold text-gray-900">
+                            <div className="min-w-0 flex-1">
+                                <h2 className="text-base xs:text-lg sm:text-2xl font-bold text-gray-900 truncate">
                                     {offspring.id_anakan}
                                 </h2>
-                                <p className="text-sm text-gray-600 mt-1">
+                                <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                                     {offspring.gender === 'jantan' ? '♂ Jantan' : '♀ Betina'} • Gen {offspring.generation || 1}
                                 </p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1 xs:gap-2 ml-2 flex-shrink-0">
                                 {/* Action Icons - Only show if not sold/promoted/dead */}
                                 {!['terjual', 'promosi', 'mati'].includes(offspring.status_farm) && (
                                     <>
                                         <button
                                             onClick={() => setShowSellForm(true)}
-                                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                            className="p-1.5 xs:p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                                             title="Jual Anakan"
                                         >
-                                            <ShoppingCart className="h-5 w-5" />
+                                            <ShoppingCart className="h-4 w-4 xs:h-5 xs:w-5" />
                                         </button>
                                         <button
                                             onClick={() => setShowPromoteForm(true)}
-                                            className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                            className="p-1.5 xs:p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                                             title="Promosi ke Indukan"
                                         >
-                                            <ArrowUpCircle className="h-5 w-5" />
+                                            <ArrowUpCircle className="h-4 w-4 xs:h-5 xs:w-5" />
                                         </button>
                                     </>
                                 )}
                                 <button
                                     onClick={() => setShowDeleteConfirm(true)}
-                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    className="p-1.5 xs:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     title="Hapus Anakan"
                                 >
-                                    <Trash2 className="h-5 w-5" />
+                                    <Trash2 className="h-4 w-4 xs:h-5 xs:w-5" />
                                 </button>
                                 <button
                                     onClick={onClose}
-                                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                    className="p-1.5 xs:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
-                                    <X className="h-6 w-6" />
+                                    <X className="h-5 w-5 xs:h-6 xs:w-6" />
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* Tabs */}
-                    <div className="flex border-b bg-white px-6">
-                        <button
-                            onClick={() => setActiveTab('info')}
-                            className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${activeTab === 'info'
-                                ? 'border-primary-600 text-primary-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                        >
-                            <Info className="h-4 w-4" />
-                            Informasi
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('growth')}
-                            className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${activeTab === 'growth'
-                                ? 'border-primary-600 text-primary-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                        >
-                            <TrendingUp className="h-4 w-4" />
-                            Pertumbuhan
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('health')}
-                            className={`flex items-center gap-2 px-4 py-3 border-b-2 font-medium transition-colors ${activeTab === 'health'
-                                ? 'border-primary-600 text-primary-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                        >
-                            <Heart className="h-4 w-4" />
-                            Kesehatan
-                        </button>
+                    {/* Tabs - Horizontally scrollable on mobile */}
+                    <div className="flex-shrink-0 border-b bg-white overflow-x-auto scrollbar-hide">
+                        <div className="flex px-2 xs:px-4 sm:px-6 min-w-max">
+                            <button
+                                onClick={() => setActiveTab('info')}
+                                className={`flex items-center gap-1.5 px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 border-b-2 font-medium text-xs xs:text-sm transition-colors whitespace-nowrap ${activeTab === 'info'
+                                    ? 'border-primary-600 text-primary-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                <Info className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+                                <span>Info</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('growth')}
+                                className={`flex items-center gap-1.5 px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 border-b-2 font-medium text-xs xs:text-sm transition-colors whitespace-nowrap ${activeTab === 'growth'
+                                    ? 'border-primary-600 text-primary-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                <TrendingUp className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+                                <span>Pertumbuhan</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('health')}
+                                className={`flex items-center gap-1.5 px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 border-b-2 font-medium text-xs xs:text-sm transition-colors whitespace-nowrap ${activeTab === 'health'
+                                    ? 'border-primary-600 text-primary-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                <Heart className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+                                <span>Kesehatan</span>
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Content */}
+                    {/* Content - Scrollable */}
                     <div className="flex-1 overflow-y-auto">
                         {/* Info Tab */}
                         {activeTab === 'info' && (
-                            <div className="p-6 space-y-6">
+                            <div className="p-3 xs:p-4 sm:p-6 space-y-3 xs:space-y-4 sm:space-y-6">
                                 {/* Basic Info */}
-                                <div className="bg-gray-50 rounded-lg p-5">
-                                    <h3 className="text-base font-semibold mb-4 text-gray-900">Informasi Dasar</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div className="bg-gray-50 rounded-lg p-3 xs:p-4 sm:p-5">
+                                    <h3 className="text-xs xs:text-sm sm:text-base font-semibold mb-2 xs:mb-3 sm:mb-4 text-gray-900">Informasi Dasar</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
                                         <div>
                                             <label className="block text-xs font-medium text-gray-500 mb-1">Tanggal Lahir</label>
                                             <p className="text-sm font-medium text-gray-900">

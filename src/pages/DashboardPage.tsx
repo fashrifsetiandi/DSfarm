@@ -151,52 +151,52 @@ export function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="max-w-7xl mx-auto px-3 xs:px-4 py-4 xs:py-6 sm:py-8">
                 {/* Welcome */}
-                <div className="mb-6 sm:mb-8">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-sm sm:text-base text-gray-600 mt-1">Selamat datang, {user?.email?.split('@')[0]}</p>
+                <div className="mb-4 xs:mb-6 sm:mb-8">
+                    <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
+                    <p className="text-xs xs:text-sm sm:text-base text-gray-600 mt-1">Selamat datang, {user?.email?.split('@')[0]}</p>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                        <div className="flex items-center justify-between mb-2 sm:mb-4">
-                            <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
-                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.livestock}</span>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-6 mb-4 xs:mb-6 sm:mb-8">
+                    <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-1.5 xs:mb-2 sm:mb-4">
+                            <Users className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 text-blue-600" />
+                            <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.livestock}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Indukan</h3>
-                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kelinci indukan</p>
+                        <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Indukan</h3>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total kelinci</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                        <div className="flex items-center justify-between mb-2 sm:mb-4">
-                            <Baby className="h-6 w-6 sm:h-8 sm:w-8 text-pink-600" />
-                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.offspring}</span>
+                    <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-1.5 xs:mb-2 sm:mb-4">
+                            <Baby className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 text-pink-600" />
+                            <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.offspring}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Anakan</h3>
-                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kelinci anakan</p>
+                        <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Anakan</h3>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total anakan</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                        <div className="flex items-center justify-between mb-2 sm:mb-4">
-                            <Home className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
-                            <span className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.kandang}</span>
+                    <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-1.5 xs:mb-2 sm:mb-4">
+                            <Home className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 text-green-600" />
+                            <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.kandang}</span>
                         </div>
-                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Kandang</h3>
-                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Total kandang tersedia</p>
+                        <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Kandang</h3>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total kandang</p>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                        <div className="flex items-center justify-between mb-2 sm:mb-4">
-                            <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
-                            <span className={`text-xl sm:text-3xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
+                        <div className="flex items-center justify-between mb-1.5 xs:mb-2 sm:mb-4">
+                            <DollarSign className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8 text-purple-600" />
+                            <span className={`text-lg xs:text-xl sm:text-3xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                 {balance >= 0 ? '+' : ''}
                                 {(balance / 1000000).toFixed(1)}M
                             </span>
                         </div>
-                        <h3 className="text-gray-600 font-medium text-sm sm:text-base">Saldo</h3>
-                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Balance keuangan</p>
+                        <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Saldo</h3>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Balance</p>
                     </div>
                 </div>
 

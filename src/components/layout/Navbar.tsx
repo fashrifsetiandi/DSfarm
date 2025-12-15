@@ -41,14 +41,14 @@ export function Navbar() {
 
     return (
         <nav className="bg-white shadow-sm border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4">
-                <div className="flex justify-between items-center h-16">
+            <div className="max-w-7xl mx-auto px-3 xs:px-4">
+                <div className="flex justify-between items-center h-14 xs:h-16">
                     {/* Logo */}
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold">R</span>
+                    <div className="flex items-center gap-1.5 xs:gap-2">
+                        <div className="w-7 h-7 xs:w-8 xs:h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-bold text-sm xs:text-base">R</span>
                         </div>
-                        <span className="font-bold text-xl text-gray-900">RUBY Farm</span>
+                        <span className="font-bold text-lg xs:text-xl text-gray-900">RUBY</span>
                     </div>
 
                     {/* Desktop Menu */}
@@ -60,8 +60,8 @@ export function Navbar() {
                                     key={item.path}
                                     onClick={() => navigate(item.path)}
                                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive(item.path)
-                                            ? 'bg-primary-50 text-primary-700'
-                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                        ? 'bg-primary-50 text-primary-700'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                         }`}
                                 >
                                     <Icon className="h-4 w-4" />
@@ -107,8 +107,8 @@ export function Navbar() {
                                         setMobileMenuOpen(false)
                                     }}
                                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium ${isActive(item.path)
-                                            ? 'bg-primary-50 text-primary-700'
-                                            : 'text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-primary-50 text-primary-700'
+                                        : 'text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     <Icon className="h-5 w-5" />
