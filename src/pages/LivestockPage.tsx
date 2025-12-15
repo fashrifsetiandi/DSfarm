@@ -253,42 +253,45 @@ export function LivestockPage() {
                         </div>
                     ) : (
                         <>
-                            {/* Mobile Card View */}
-                            <div className="sm:hidden divide-y divide-gray-200">
-                                {filteredLivestock.map((item) => (
-                                    <div key={item.id} className="p-4">
+                            {/* Mobile Card View - Improved Design */}
+                            <div className="sm:hidden">
+                                {filteredLivestock.map((item, index) => (
+                                    <div
+                                        key={item.id}
+                                        className={`p-3 ${index !== 0 ? 'border-t border-gray-100' : ''}`}
+                                    >
                                         <div
                                             onClick={() => setSelectedLivestock(item)}
-                                            className="cursor-pointer active:bg-gray-50"
+                                            className="cursor-pointer active:opacity-70"
                                         >
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`flex items-center gap-1 font-mono font-semibold ${item.gender === 'jantan' ? 'text-blue-600' : 'text-pink-600'}`}>
-                                                        <span className="text-lg">{item.gender === 'jantan' ? '♂' : '♀'}</span>
-                                                        {item.id_indukan}
+                                            {/* Top row: ID + Weight */}
+                                            <div className="flex justify-between items-center mb-1.5">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`text-base font-bold ${item.gender === 'jantan' ? 'text-blue-600' : 'text-pink-600'}`}>
+                                                        {item.gender === 'jantan' ? '♂' : '♀'} {item.id_indukan}
                                                     </span>
                                                     {isNew(item.created_at) && (
-                                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                                            BARU
+                                                        <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-500 text-white">
+                                                            NEW
                                                         </span>
                                                     )}
                                                 </div>
-                                                <span className="text-sm text-gray-900">
+                                                <span className="text-sm font-semibold text-gray-700">
                                                     {item.latest_weight || item.weight_kg ? `${item.latest_weight || item.weight_kg} kg` : '-'}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                                                <span>{new Date(item.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
-                                                <span className="text-gray-300">•</span>
-                                                <span>{calculateAge(item.birth_date)}</span>
-                                            </div>
+                                            {/* Bottom row: Date + Age */}
+                                            <p className="text-xs text-gray-500 mb-2">
+                                                {new Date(item.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })} · {calculateAge(item.birth_date)}
+                                            </p>
                                         </div>
-                                        {/* Status dropdown separated from row click */}
+                                        {/* Status dropdown */}
                                         <div onClick={(e) => e.stopPropagation()}>
                                             <StatusDropdown
                                                 value={item.status}
                                                 options={item.gender === 'jantan' ? maleStatusOptions : femaleStatusOptions}
                                                 onChange={(value) => updateStatus(item.id, 'status', value)}
+                                                compact
                                             />
                                         </div>
                                     </div>
