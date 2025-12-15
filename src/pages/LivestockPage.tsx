@@ -155,84 +155,112 @@ export function LivestockPage() {
                     </div>
                 </div>
 
-                {/* Stats Cards - Clickable Tab Filters */}
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
-                    {/* Di Farm Card */}
-                    <div
-                        onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Di Farm</p>
-                        <p className="text-xl sm:text-3xl font-bold text-green-600">
-                            {livestock.filter((l) => l.status_farm === 'infarm').length}
-                        </p>
-                        <div className="flex gap-2 sm:gap-4 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100 flex-wrap">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('jantan'); }}
-                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'jantan'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-blue-600 hover:bg-blue-50'
-                                    }`}
-                            >
-                                ♂ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'jantan').length}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('betina'); }}
-                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'betina'
-                                    ? 'bg-pink-500 text-white'
-                                    : 'text-pink-600 hover:bg-pink-50'
-                                    }`}
-                            >
-                                ♀ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'betina').length}
-                            </button>
-                        </div>
+                {/* Stats Cards - Horizontal scroll on mobile, grid on desktop */}
+                <div className="mb-4 sm:mb-6">
+                    {/* Mobile: Horizontal scroll */}
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide sm:hidden">
+                        {/* Di Farm */}
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
+                            className={`flex-shrink-0 w-24 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && !filterSubStatus ? 'border-green-500 bg-green-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Di Farm</p>
+                            <p className="text-2xl font-bold text-green-600 mt-0.5">{livestock.filter((l) => l.status_farm === 'infarm').length}</p>
+                        </button>
+
+                        {/* Gender filters */}
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus('jantan'); }}
+                            className={`flex-shrink-0 w-16 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && filterSubStatus === 'jantan' ? 'border-blue-500 bg-blue-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">♂</p>
+                            <p className="text-xl font-bold text-blue-600 mt-0.5">{livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'jantan').length}</p>
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus('betina'); }}
+                            className={`flex-shrink-0 w-16 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && filterSubStatus === 'betina' ? 'border-pink-500 bg-pink-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">♀</p>
+                            <p className="text-xl font-bold text-pink-600 mt-0.5">{livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'betina').length}</p>
+                        </button>
+
+                        {/* Divider */}
+                        <div className="flex-shrink-0 w-px bg-gray-200 mx-1" />
+
+                        {/* Keluar */}
+                        <button
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
+                            className={`flex-shrink-0 w-16 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'keluar' && filterSubStatus === 'terjual' ? 'border-orange-500 bg-orange-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Jual</p>
+                            <p className="text-xl font-bold text-orange-600 mt-0.5">{livestock.filter((l) => l.status_farm === 'terjual').length}</p>
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus('mati'); }}
+                            className={`flex-shrink-0 w-16 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'keluar' && filterSubStatus === 'mati' ? 'border-gray-500 bg-gray-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Mati</p>
+                            <p className="text-xl font-bold text-gray-600 mt-0.5">{livestock.filter((l) => l.status_farm === 'mati').length}</p>
+                        </button>
+
+                        {/* Total */}
+                        <button
+                            onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
+                            className={`flex-shrink-0 w-16 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 bg-primary-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Total</p>
+                            <p className="text-xl font-bold text-primary-600 mt-0.5">{livestock.length}</p>
+                        </button>
                     </div>
 
-                    {/* Keluar Card */}
-                    <div
-                        onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Keluar</p>
-                        <p className="text-xl sm:text-3xl font-bold text-red-600">
-                            {livestock.filter((l) => l.status_farm !== 'infarm').length}
-                        </p>
-                        <div className="flex gap-2 sm:gap-4 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100 flex-wrap">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
-                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
-                                    ? 'bg-orange-500 text-white'
-                                    : 'text-orange-600 hover:bg-orange-50'
-                                    }`}
-                            >
-                                Jual {livestock.filter((l) => l.status_farm === 'terjual').length}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }}
-                                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
-                                    ? 'bg-gray-500 text-white'
-                                    : 'text-gray-600 hover:bg-gray-50'
-                                    }`}
-                            >
-                                Mati {livestock.filter((l) => l.status_farm === 'mati').length}
-                            </button>
+                    {/* Desktop: Grid layout */}
+                    <div className="hidden sm:grid grid-cols-3 gap-4">
+                        {/* Di Farm Card */}
+                        <div
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Di Farm</p>
+                            <p className="text-3xl font-bold text-green-600">{livestock.filter((l) => l.status_farm === 'infarm').length}</p>
+                            <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('jantan'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'infarm' && filterSubStatus === 'jantan' ? 'bg-blue-500 text-white' : 'text-blue-600 hover:bg-blue-50'}`}>
+                                    ♂ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'jantan').length}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('betina'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'infarm' && filterSubStatus === 'betina' ? 'bg-pink-500 text-white' : 'text-pink-600 hover:bg-pink-50'}`}>
+                                    ♀ {livestock.filter((l) => l.status_farm === 'infarm' && l.gender === 'betina').length}
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Total Indukan Card */}
-                    <button
-                        onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total</p>
-                        <p className="text-xl sm:text-3xl font-bold text-primary-600">{livestock.length}</p>
-                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
-                            <p className="text-xs text-gray-500">Semua Record</p>
+                        {/* Keluar Card */}
+                        <div
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Keluar</p>
+                            <p className="text-3xl font-bold text-red-600">{livestock.filter((l) => l.status_farm !== 'infarm').length}</p>
+                            <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'keluar' && filterSubStatus === 'terjual' ? 'bg-orange-500 text-white' : 'text-orange-600 hover:bg-orange-50'}`}>
+                                    Jual {livestock.filter((l) => l.status_farm === 'terjual').length}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'keluar' && filterSubStatus === 'mati' ? 'bg-gray-500 text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
+                                    Mati {livestock.filter((l) => l.status_farm === 'mati').length}
+                                </button>
+                            </div>
                         </div>
-                    </button>
+
+                        {/* Total Card */}
+                        <button
+                            onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Total</p>
+                            <p className="text-3xl font-bold text-primary-600">{livestock.length}</p>
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                                <p className="text-xs text-gray-500">Semua Record</p>
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Table */}

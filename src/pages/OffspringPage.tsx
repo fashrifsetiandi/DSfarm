@@ -149,98 +149,125 @@ export function OffspringPage() {
                     />
                 </div>
 
-                {/* Stats Cards - Clickable Tab Filters */}
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
-                    {/* Di Farm Card */}
-                    <div
-                        onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Di Farm</p>
-                        <p className="text-xl sm:text-3xl font-bold text-green-600">{infarmCount}</p>
-                        <div className="flex gap-1 sm:gap-2 flex-wrap mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('anakan'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'anakan'
-                                    ? 'bg-yellow-500 text-white'
-                                    : 'text-yellow-600 hover:bg-yellow-50'
-                                    }`}
-                            >
-                                <span className="hidden sm:inline">Anakan</span> {statusCounts.anakan}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('pertumbuhan'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'pertumbuhan'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-blue-600 hover:bg-blue-50'
-                                    }`}
-                            >
-                                <span className="hidden sm:inline">Tumbuh</span> {statusCounts.pertumbuhan}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('siap_jual'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'infarm' && filterSubStatus === 'siap_jual'
-                                    ? 'bg-green-500 text-white'
-                                    : 'text-green-600 hover:bg-green-50'
-                                    }`}
-                            >
-                                <span className="hidden sm:inline">Siap</span> {statusCounts.siap_jual}
-                            </button>
-                        </div>
+                {/* Stats Cards - Horizontal scroll on mobile, grid on desktop */}
+                <div className="mb-4 sm:mb-6">
+                    {/* Mobile: Horizontal scroll */}
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide sm:hidden">
+                        {/* Di Farm */}
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
+                            className={`flex-shrink-0 w-28 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' ? 'border-green-500 bg-green-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Di Farm</p>
+                            <p className="text-2xl font-bold text-green-600 mt-0.5">{infarmCount}</p>
+                        </button>
+
+                        {/* Sub-status buttons */}
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus('anakan'); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && filterSubStatus === 'anakan' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Anakan</p>
+                            <p className="text-xl font-bold text-yellow-600 mt-0.5">{statusCounts.anakan}</p>
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus('pertumbuhan'); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && filterSubStatus === 'pertumbuhan' ? 'border-blue-500 bg-blue-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Tumbuh</p>
+                            <p className="text-xl font-bold text-blue-600 mt-0.5">{statusCounts.pertumbuhan}</p>
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus('siap_jual'); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'infarm' && filterSubStatus === 'siap_jual' ? 'border-orange-500 bg-orange-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Siap</p>
+                            <p className="text-xl font-bold text-orange-600 mt-0.5">{statusCounts.siap_jual}</p>
+                        </button>
+
+                        {/* Divider */}
+                        <div className="flex-shrink-0 w-px bg-gray-200 mx-1" />
+
+                        {/* Keluar */}
+                        <button
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'keluar' && filterSubStatus === 'terjual' ? 'border-orange-500 bg-orange-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Jual</p>
+                            <p className="text-xl font-bold text-orange-600 mt-0.5">{statusCounts.terjual}</p>
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus('promosi'); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'keluar' && filterSubStatus === 'promosi' ? 'border-purple-500 bg-purple-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Promo</p>
+                            <p className="text-xl font-bold text-purple-600 mt-0.5">{statusCounts.promosi}</p>
+                        </button>
+
+                        {/* Total */}
+                        <button
+                            onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
+                            className={`flex-shrink-0 w-20 bg-white p-3 rounded-xl shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 bg-primary-50' : 'border-gray-100'}`}
+                        >
+                            <p className="text-[10px] font-medium text-gray-500">Total</p>
+                            <p className="text-xl font-bold text-primary-600 mt-0.5">{offspring.length}</p>
+                        </button>
                     </div>
 
-                    {/* Keluar Card */}
-                    <div
-                        onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Keluar</p>
-                        <p className="text-xl sm:text-3xl font-bold text-red-600">{keluarCount}</p>
-                        <div className="flex gap-1 sm:gap-2 flex-wrap mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'terjual'
-                                    ? 'bg-orange-500 text-white'
-                                    : 'text-orange-600 hover:bg-orange-50'
-                                    }`}
-                            >
-                                Jual {statusCounts.terjual}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('promosi'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'promosi'
-                                    ? 'bg-purple-500 text-white'
-                                    : 'text-purple-600 hover:bg-purple-50'
-                                    }`}
-                            >
-                                <span className="hidden sm:inline">Promosi</span><span className="sm:hidden">Pro</span> {statusCounts.promosi}
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }}
-                                className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded text-xs font-medium transition-colors ${activeTab === 'keluar' && filterSubStatus === 'mati'
-                                    ? 'bg-gray-500 text-white'
-                                    : 'text-gray-600 hover:bg-gray-50'
-                                    }`}
-                            >
-                                Mati {statusCounts.mati}
-                            </button>
+                    {/* Desktop: Grid layout */}
+                    <div className="hidden sm:grid grid-cols-3 gap-4">
+                        {/* Di Farm Card */}
+                        <div
+                            onClick={() => { setActiveTab('infarm'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'infarm' ? 'border-green-500 ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Di Farm</p>
+                            <p className="text-3xl font-bold text-green-600">{infarmCount}</p>
+                            <div className="flex gap-2 flex-wrap mt-3 pt-3 border-t border-gray-100">
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('anakan'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'infarm' && filterSubStatus === 'anakan' ? 'bg-yellow-500 text-white' : 'text-yellow-600 hover:bg-yellow-50'}`}>
+                                    Anakan {statusCounts.anakan}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('pertumbuhan'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'infarm' && filterSubStatus === 'pertumbuhan' ? 'bg-blue-500 text-white' : 'text-blue-600 hover:bg-blue-50'}`}>
+                                    Tumbuh {statusCounts.pertumbuhan}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('infarm'); setFilterSubStatus('siap_jual'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'infarm' && filterSubStatus === 'siap_jual' ? 'bg-green-500 text-white' : 'text-green-600 hover:bg-green-50'}`}>
+                                    Siap {statusCounts.siap_jual}
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Total Anakan Card */}
-                    <button
-                        onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
-                        className={`bg-white p-3 sm:p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'
-                            }`}
-                    >
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total</p>
-                        <p className="text-xl sm:text-3xl font-bold text-primary-600">{offspring.length}</p>
-                        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
-                            <p className="text-xs text-gray-500">Semua</p>
+                        {/* Keluar Card */}
+                        <div
+                            onClick={() => { setActiveTab('keluar'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all cursor-pointer ${activeTab === 'keluar' ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Keluar</p>
+                            <p className="text-3xl font-bold text-red-600">{keluarCount}</p>
+                            <div className="flex gap-2 flex-wrap mt-3 pt-3 border-t border-gray-100">
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('terjual'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'keluar' && filterSubStatus === 'terjual' ? 'bg-orange-500 text-white' : 'text-orange-600 hover:bg-orange-50'}`}>
+                                    Jual {statusCounts.terjual}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('promosi'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'keluar' && filterSubStatus === 'promosi' ? 'bg-purple-500 text-white' : 'text-purple-600 hover:bg-purple-50'}`}>
+                                    Promosi {statusCounts.promosi}
+                                </button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveTab('keluar'); setFilterSubStatus('mati'); }} className={`px-2 py-1 rounded text-xs font-medium ${activeTab === 'keluar' && filterSubStatus === 'mati' ? 'bg-gray-500 text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
+                                    Mati {statusCounts.mati}
+                                </button>
+                            </div>
                         </div>
-                    </button>
+
+                        {/* Total Card */}
+                        <button
+                            onClick={() => { setActiveTab('all'); setFilterSubStatus(null); }}
+                            className={`bg-white p-6 rounded-lg shadow-sm border-2 text-left transition-all ${activeTab === 'all' ? 'border-primary-500 ring-2 ring-primary-200' : 'border-gray-200 hover:border-gray-300'}`}
+                        >
+                            <p className="text-sm font-medium text-gray-600 mb-1">Total</p>
+                            <p className="text-3xl font-bold text-primary-600">{offspring.length}</p>
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                                <p className="text-xs text-gray-500">Semua</p>
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Table */}
@@ -396,9 +423,10 @@ export function OffspringPage() {
                                 </tbody>
                             </table>
                         </>
-                    )}
-                </div>
-            </div>
+                    )
+                    }
+                </div >
+            </div >
 
             {/* Detail Modal */}
             {
@@ -414,16 +442,18 @@ export function OffspringPage() {
             }
 
             {/* Batch Sell Modal */}
-            {showBatchSell && (
-                <BatchSellForm
-                    type="offspring"
-                    onClose={() => setShowBatchSell(false)}
-                    onSuccess={() => {
-                        invalidateOffspring()
-                        setShowBatchSell(false)
-                    }}
-                />
-            )}
+            {
+                showBatchSell && (
+                    <BatchSellForm
+                        type="offspring"
+                        onClose={() => setShowBatchSell(false)}
+                        onSuccess={() => {
+                            invalidateOffspring()
+                            setShowBatchSell(false)
+                        }}
+                    />
+                )
+            }
         </div >
     )
 }
