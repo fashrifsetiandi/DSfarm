@@ -66,13 +66,22 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
             const updatePosition = () => {
                 if (buttonRef.current) {
                     const rect = buttonRef.current.getBoundingClientRect()
-                    // Check if dropdown would go off-screen on the right
+                    // Menu dimensions
                     const menuWidth = 192 // w-48 = 12rem = 192px
+                    const menuHeight = options.length * 44 + 8 // Approximate: 44px per option + padding
+
+                    // Check if dropdown would go off-screen on the right
                     const left = rect.left + menuWidth > window.innerWidth
                         ? window.innerWidth - menuWidth - 16
                         : rect.left
+
+                    // Check if dropdown would go off-screen at the bottom
+                    const spaceBelow = window.innerHeight - rect.bottom
+                    const spaceAbove = rect.top
+                    const openUpward = spaceBelow < menuHeight + 20 && spaceAbove > spaceBelow
+
                     setMenuPosition({
-                        top: rect.bottom + 4,
+                        top: openUpward ? rect.top - menuHeight - 4 : rect.bottom + 4,
                         left: Math.max(8, left)
                     })
                 }
@@ -88,7 +97,7 @@ export function StatusDropdown({ value, options, onChange, disabled, compact }: 
             window.addEventListener('scroll', handleScroll, true)
             return () => window.removeEventListener('scroll', handleScroll, true)
         }
-    }, [isOpen])
+    }, [isOpen, options.length])
 
     // Toggle dropdown - memoized to prevent recreating
     const toggleDropdown = useCallback(() => {
