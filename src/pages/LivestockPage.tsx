@@ -252,20 +252,63 @@ export function LivestockPage() {
                             </button>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
+                        <>
+                            {/* Mobile Card View */}
+                            <div className="sm:hidden divide-y divide-gray-200">
+                                {filteredLivestock.map((item) => (
+                                    <div key={item.id} className="p-4">
+                                        <div
+                                            onClick={() => setSelectedLivestock(item)}
+                                            className="cursor-pointer active:bg-gray-50"
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`flex items-center gap-1 font-mono font-semibold ${item.gender === 'jantan' ? 'text-blue-600' : 'text-pink-600'}`}>
+                                                        <span className="text-lg">{item.gender === 'jantan' ? '♂' : '♀'}</span>
+                                                        {item.id_indukan}
+                                                    </span>
+                                                    {isNew(item.created_at) && (
+                                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                                            BARU
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <span className="text-sm text-gray-900">
+                                                    {item.latest_weight || item.weight_kg ? `${item.latest_weight || item.weight_kg} kg` : '-'}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                                                <span>{new Date(item.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                                                <span className="text-gray-300">•</span>
+                                                <span>{calculateAge(item.birth_date)}</span>
+                                            </div>
+                                        </div>
+                                        {/* Status dropdown separated from row click */}
+                                        <div onClick={(e) => e.stopPropagation()}>
+                                            <StatusDropdown
+                                                value={item.status}
+                                                options={item.gender === 'jantan' ? maleStatusOptions : femaleStatusOptions}
+                                                onChange={(value) => updateStatus(item.id, 'status', value)}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Desktop Table View */}
+                            <table className="hidden sm:table min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             ID Indukan
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Tanggal Lahir
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Bobot
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Status
                                         </th>
                                     </tr>
@@ -278,7 +321,7 @@ export function LivestockPage() {
                                             className="hover:bg-gray-50 cursor-pointer"
                                         >
                                             {/* ID Indukan */}
-                                            <td className="px-6 py-4 whitespace-nowrap">
+                                            <td className="px-4 py-3 whitespace-nowrap">
                                                 <div className="flex items-center gap-2">
                                                     <span className={`flex items-center gap-1.5 font-mono font-semibold ${item.gender === 'jantan'
                                                         ? 'text-blue-600'
@@ -298,7 +341,7 @@ export function LivestockPage() {
                                             </td>
 
                                             {/* Tanggal Lahir + Umur */}
-                                            <td className="px-6 py-4 whitespace-nowrap">
+                                            <td className="px-4 py-3 whitespace-nowrap">
                                                 <div className="text-sm text-gray-900">
                                                     {new Date(item.birth_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                 </div>
@@ -307,8 +350,8 @@ export function LivestockPage() {
                                                 </div>
                                             </td>
 
-                                            {/* Bobot - Latest from growth_logs or fallback to weight_kg */}
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {/* Bobot */}
+                                            <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                                                 {item.latest_weight
                                                     ? `${item.latest_weight} kg`
                                                     : item.weight_kg
@@ -317,8 +360,8 @@ export function LivestockPage() {
                                                 }
                                             </td>
 
-                                            {/* Status - Styled Dropdown */}
-                                            <td className="px-6 py-4 whitespace-nowrap">
+                                            {/* Status */}
+                                            <td className="px-4 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                                                 <StatusDropdown
                                                     value={item.status}
                                                     options={item.gender === 'jantan' ? maleStatusOptions : femaleStatusOptions}
@@ -329,7 +372,7 @@ export function LivestockPage() {
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
+                        </>
                     )}
                 </div>
 
