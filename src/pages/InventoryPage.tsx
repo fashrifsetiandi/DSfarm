@@ -204,103 +204,171 @@ export function InventoryPage() {
                         </button>
                     </div>
 
-                    {/* Equipment Tab Content */}
                     {activeTab === 'equipment' && (
-                        <div className="overflow-x-auto">
+                        <div>
                             {equipment.length === 0 ? (
                                 <div className="p-8 text-center text-gray-500">
                                     <Wrench className="h-12 w-12 mx-auto mb-3 text-gray-300" />
                                     <p>Belum ada data peralatan</p>
                                 </div>
                             ) : (
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Beli</th>
-                                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Nilai</th>
-                                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Kondisi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
+                                <>
+                                    {/* Mobile Card View */}
+                                    <div className="sm:hidden divide-y divide-gray-200">
                                         {equipment.map((item) => {
                                             const cond = conditionLabels[item.condition || ''] || { label: item.condition, color: 'bg-gray-100 text-gray-700' }
                                             return (
-                                                <tr
+                                                <div
                                                     key={item.id}
                                                     onClick={() => setSelectedEquipment(item)}
-                                                    className="hover:bg-gray-50 cursor-pointer"
+                                                    className="p-4 hover:bg-gray-50 cursor-pointer active:bg-gray-100"
                                                 >
-                                                    <td className="px-6 py-4 text-sm font-mono text-gray-900">{item.equipment_code}</td>
-                                                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.equipment_name}</td>
-                                                    <td className="px-6 py-4 text-sm text-gray-500">
-                                                        {item.purchase_date
-                                                            ? new Date(item.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
-                                                            : '-'}
-                                                    </td>
-                                                    <td className="px-6 py-4 text-sm text-right font-medium text-gray-900">
-                                                        {item.current_value || item.purchase_price ? formatCurrency(item.current_value || item.purchase_price || 0) : '-'}
-                                                    </td>
-                                                    <td className="px-6 py-4 text-center">
-                                                        <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${cond.color}`}>
+                                                    <div className="flex justify-between items-start mb-2">
+                                                        <div>
+                                                            <p className="font-medium text-gray-900">{item.equipment_name}</p>
+                                                            <p className="text-xs text-gray-500 font-mono">{item.equipment_code}</p>
+                                                        </div>
+                                                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${cond.color}`}>
                                                             {cond.label}
                                                         </span>
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                    <div className="flex justify-between items-center text-sm">
+                                                        <span className="text-gray-500">
+                                                            {item.purchase_date
+                                                                ? new Date(item.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+                                                                : '-'}
+                                                        </span>
+                                                        <span className="font-semibold text-gray-900">
+                                                            {item.current_value || item.purchase_price ? formatCurrency(item.current_value || item.purchase_price || 0) : '-'}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             )
                                         })}
-                                    </tbody>
-                                </table>
+                                    </div>
+
+                                    {/* Desktop Table View */}
+                                    <table className="hidden sm:table min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Beli</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Nilai</th>
+                                                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Kondisi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {equipment.map((item) => {
+                                                const cond = conditionLabels[item.condition || ''] || { label: item.condition, color: 'bg-gray-100 text-gray-700' }
+                                                return (
+                                                    <tr
+                                                        key={item.id}
+                                                        onClick={() => setSelectedEquipment(item)}
+                                                        className="hover:bg-gray-50 cursor-pointer"
+                                                    >
+                                                        <td className="px-4 py-3 text-sm font-mono text-gray-900">{item.equipment_code}</td>
+                                                        <td className="px-4 py-3 text-sm font-medium text-gray-900">{item.equipment_name}</td>
+                                                        <td className="px-4 py-3 text-sm text-gray-500">
+                                                            {item.purchase_date
+                                                                ? new Date(item.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+                                                                : '-'}
+                                                        </td>
+                                                        <td className="px-4 py-3 text-sm text-right font-medium text-gray-900">
+                                                            {item.current_value || item.purchase_price ? formatCurrency(item.current_value || item.purchase_price || 0) : '-'}
+                                                        </td>
+                                                        <td className="px-4 py-3 text-center">
+                                                            <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${cond.color}`}>
+                                                                {cond.label}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </>
                             )}
                         </div>
                     )}
 
                     {/* Feed Tab Content */}
                     {activeTab === 'feed' && (
-                        <div className="overflow-x-auto">
+                        <div>
                             {feedPurchases.length === 0 ? (
                                 <div className="p-8 text-center text-gray-500">
                                     <Package className="h-12 w-12 mx-auto mb-3 text-gray-300" />
                                     <p>Belum ada pembelian pakan</p>
                                 </div>
                             ) : (
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenis Pakan</th>
-                                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Jumlah</th>
-                                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Harga</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
+                                <>
+                                    {/* Mobile Card View */}
+                                    <div className="sm:hidden divide-y divide-gray-200">
                                         {feedPurchases.map((purchase) => (
-                                            <tr
+                                            <div
                                                 key={purchase.id}
                                                 onClick={() => setSelectedFeedPurchase(purchase)}
-                                                className="hover:bg-gray-50 cursor-pointer"
+                                                className="p-4 hover:bg-gray-50 cursor-pointer active:bg-gray-100"
                                             >
-                                                <td className="px-6 py-4 text-sm text-gray-900">
-                                                    {new Date(purchase.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                                </td>
-                                                <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                                                    {purchase.settings_feed_types?.feed_name || '-'}
-                                                </td>
-                                                <td className="px-6 py-4 text-sm text-right text-gray-900">
-                                                    {purchase.quantity} {purchase.settings_feed_types?.unit_of_measure || ''}
-                                                </td>
-                                                <td className="px-6 py-4 text-sm text-right font-medium text-green-600">
-                                                    {purchase.total_price ? formatCurrency(purchase.total_price) : '-'}
-                                                </td>
-                                                <td className="px-6 py-4 text-sm text-gray-500">
-                                                    {purchase.supplier || '-'}
-                                                </td>
-                                            </tr>
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div>
+                                                        <p className="font-medium text-gray-900">
+                                                            {purchase.settings_feed_types?.feed_name || '-'}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            {new Date(purchase.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                        </p>
+                                                    </div>
+                                                    <span className="font-semibold text-green-600">
+                                                        {purchase.total_price ? formatCurrency(purchase.total_price) : '-'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-sm text-gray-500">
+                                                    <span>{purchase.quantity} {purchase.settings_feed_types?.unit_of_measure || ''}</span>
+                                                    <span>{purchase.supplier || '-'}</span>
+                                                </div>
+                                            </div>
                                         ))}
-                                    </tbody>
-                                </table>
+                                    </div>
+
+                                    {/* Desktop Table View */}
+                                    <table className="hidden sm:table min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenis Pakan</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Jumlah</th>
+                                                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Harga</th>
+                                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {feedPurchases.map((purchase) => (
+                                                <tr
+                                                    key={purchase.id}
+                                                    onClick={() => setSelectedFeedPurchase(purchase)}
+                                                    className="hover:bg-gray-50 cursor-pointer"
+                                                >
+                                                    <td className="px-4 py-3 text-sm text-gray-900">
+                                                        {new Date(purchase.purchase_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                                                        {purchase.settings_feed_types?.feed_name || '-'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-sm text-right text-gray-900">
+                                                        {purchase.quantity} {purchase.settings_feed_types?.unit_of_measure || ''}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-sm text-right font-medium text-green-600">
+                                                        {purchase.total_price ? formatCurrency(purchase.total_price) : '-'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-sm text-gray-500">
+                                                        {purchase.supplier || '-'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
                             )}
                         </div>
                     )}

@@ -328,71 +328,118 @@ export function SettingsFinanceCategoriesPage() {
                         </button>
                     </div>
                 ) : (
-                    <table className="w-full">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Tipe
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kode
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Kategori
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Deskripsi
-                                </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                    <>
+                        {/* Mobile Card View */}
+                        <div className="sm:hidden divide-y divide-gray-200">
                             {filteredCategories.map((category) => (
-                                <tr key={category.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        {category.transaction_type === 'income' ? (
-                                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                <TrendingUp className="h-3 w-3" />
-                                                Pemasukan
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                <TrendingDown className="h-3 w-3" />
-                                                Pengeluaran
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="font-mono font-semibold text-primary-600">
-                                            {category.category_code}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium">
-                                        {category.category_name}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">
-                                        {category.description || '-'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button
-                                            onClick={() => handleEdit(category)}
-                                            className="text-blue-600 hover:text-blue-900 mr-3"
-                                        >
-                                            <Edit2 className="h-4 w-4 inline" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(category.id)}
-                                            className="text-red-600 hover:text-red-900"
-                                        >
-                                            <Trash2 className="h-4 w-4 inline" />
-                                        </button>
-                                    </td>
-                                </tr>
+                                <div key={category.id} className="p-4">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="flex items-center gap-2">
+                                            {category.transaction_type === 'income' ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <TrendingUp className="h-3 w-3" />
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    <TrendingDown className="h-3 w-3" />
+                                                </span>
+                                            )}
+                                            <div>
+                                                <span className="font-mono font-semibold text-primary-600 text-sm">
+                                                    {category.category_code}
+                                                </span>
+                                                <p className="font-medium text-gray-900">{category.category_name}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleEdit(category)}
+                                                className="text-blue-600 hover:text-blue-900 p-1"
+                                            >
+                                                <Edit2 className="h-4 w-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(category.id)}
+                                                className="text-red-600 hover:text-red-900 p-1"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {category.description && (
+                                        <p className="text-sm text-gray-600 line-clamp-2 ml-8">{category.description}</p>
+                                    )}
+                                </div>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <table className="hidden sm:table w-full">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Tipe
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Kode
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Kategori
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Deskripsi
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {filteredCategories.map((category) => (
+                                    <tr key={category.id} className="hover:bg-gray-50">
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            {category.transaction_type === 'income' ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <TrendingUp className="h-3 w-3" />
+                                                    Pemasukan
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    <TrendingDown className="h-3 w-3" />
+                                                    Pengeluaran
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="font-mono font-semibold text-primary-600">
+                                                {category.category_code}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap font-medium">
+                                            {category.category_name}
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-600 max-w-xs truncate">
+                                            {category.description || '-'}
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                            <button
+                                                onClick={() => handleEdit(category)}
+                                                className="text-blue-600 hover:text-blue-900 mr-3"
+                                            >
+                                                <Edit2 className="h-4 w-4 inline" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(category.id)}
+                                                className="text-red-600 hover:text-red-900"
+                                            >
+                                                <Trash2 className="h-4 w-4 inline" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </>
                 )}
             </div>
         </div>

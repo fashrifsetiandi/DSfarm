@@ -292,63 +292,102 @@ export function SettingsFeedTypesPage() {
                         </button>
                     </div>
                 ) : (
-                    <table className="w-full">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kode
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Pakan
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Satuan
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Deskripsi
-                                </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                    <>
+                        {/* Mobile Card View */}
+                        <div className="sm:hidden divide-y divide-gray-200">
                             {feedTypes.map((feed) => (
-                                <tr key={feed.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="font-mono font-semibold text-primary-600">
-                                            {feed.feed_type_code}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap font-medium">
-                                        {feed.feed_name}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            {feed.unit_of_measure}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">
-                                        {feed.description || '-'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button
-                                            onClick={() => handleEdit(feed)}
-                                            className="text-blue-600 hover:text-blue-900 mr-3"
-                                        >
-                                            <Edit2 className="h-4 w-4 inline" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(feed.id)}
-                                            className="text-red-600 hover:text-red-900"
-                                        >
-                                            <Trash2 className="h-4 w-4 inline" />
-                                        </button>
-                                    </td>
-                                </tr>
+                                <div key={feed.id} className="p-4">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <span className="font-mono font-semibold text-primary-600 text-sm">
+                                                {feed.feed_type_code}
+                                            </span>
+                                            <p className="font-medium text-gray-900">{feed.feed_name}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {feed.unit_of_measure}
+                                            </span>
+                                            <button
+                                                onClick={() => handleEdit(feed)}
+                                                className="text-blue-600 hover:text-blue-900 p-1"
+                                            >
+                                                <Edit2 className="h-4 w-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(feed.id)}
+                                                className="text-red-600 hover:text-red-900 p-1"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {feed.description && (
+                                        <p className="text-sm text-gray-600 line-clamp-2">{feed.description}</p>
+                                    )}
+                                </div>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <table className="hidden sm:table w-full">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Kode
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Pakan
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Satuan
+                                    </th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Deskripsi
+                                    </th>
+                                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {feedTypes.map((feed) => (
+                                    <tr key={feed.id} className="hover:bg-gray-50">
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="font-mono font-semibold text-primary-600">
+                                                {feed.feed_type_code}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap font-medium">
+                                            {feed.feed_name}
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {feed.unit_of_measure}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-gray-600 max-w-xs truncate">
+                                            {feed.description || '-'}
+                                        </td>
+                                        <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                            <button
+                                                onClick={() => handleEdit(feed)}
+                                                className="text-blue-600 hover:text-blue-900 mr-3"
+                                            >
+                                                <Edit2 className="h-4 w-4 inline" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(feed.id)}
+                                                className="text-red-600 hover:text-red-900"
+                                            >
+                                                <Trash2 className="h-4 w-4 inline" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </>
                 )}
             </div>
         </div>
