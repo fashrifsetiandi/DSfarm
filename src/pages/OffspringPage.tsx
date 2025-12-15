@@ -298,47 +298,44 @@ export function OffspringPage() {
                         </div>
                     ) : (
                         <>
-                            {/* Mobile Card View - Improved Design */}
+                            {/* Mobile Card View - Compact 2-Row Design */}
                             <div className="sm:hidden">
                                 {filteredOffspring.map((item, index) => (
                                     <div
                                         key={item.id}
-                                        className={`p-3 ${index !== 0 ? 'border-t border-gray-100' : ''}`}
+                                        onClick={() => setSelectedOffspringId(item.id)}
+                                        className={`p-3 cursor-pointer active:bg-gray-50 ${index !== 0 ? 'border-t border-gray-100' : ''}`}
                                     >
-                                        <div
-                                            onClick={() => setSelectedOffspringId(item.id)}
-                                            className="cursor-pointer active:opacity-70"
-                                        >
-                                            {/* Top row: ID + Weight */}
-                                            <div className="flex justify-between items-center mb-1.5">
-                                                <div className="flex items-center gap-1.5 min-w-0 flex-1 mr-2">
-                                                    <span className={`text-sm font-bold truncate ${item.gender === 'jantan' ? 'text-blue-600' : 'text-pink-600'}`}>
-                                                        {item.gender === 'jantan' ? '♂' : '♀'} {item.id_anakan}
-                                                    </span>
-                                                    {isNew(item.created_at) && (
-                                                        <span className="flex-shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-500 text-white">
-                                                            NEW
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <span className="flex-shrink-0 text-sm font-semibold text-gray-700">
-                                                    {item.latest_weight || item.weight_kg ? `${item.latest_weight || item.weight_kg} kg` : '-'}
+                                        {/* Row 1: ID + Weight */}
+                                        <div className="flex justify-between items-center mb-1">
+                                            <div className="flex items-center gap-1.5 min-w-0 flex-1 mr-2">
+                                                <span className={`text-sm font-bold truncate ${item.gender === 'jantan' ? 'text-blue-600' : 'text-pink-600'}`}>
+                                                    {item.gender === 'jantan' ? '♂' : '♀'} {item.id_anakan}
                                                 </span>
+                                                {isNew(item.created_at) && (
+                                                    <span className="flex-shrink-0 px-1 py-0.5 rounded text-[9px] font-semibold bg-green-500 text-white">
+                                                        NEW
+                                                    </span>
+                                                )}
                                             </div>
-                                            {/* Bottom row: Date + Age */}
-                                            <p className="text-xs text-gray-500 mb-2">
-                                                {format(new Date(item.birth_date), 'dd MMM yyyy')} · {calculateAge(item.birth_date)}
-                                            </p>
+                                            <span className="flex-shrink-0 text-sm font-semibold text-gray-700">
+                                                {item.latest_weight || item.weight_kg ? `${item.latest_weight || item.weight_kg} kg` : '-'}
+                                            </span>
                                         </div>
-                                        {/* Status dropdown */}
-                                        <div onClick={(e) => e.stopPropagation()}>
-                                            <StatusDropdown
-                                                value={item.status_farm}
-                                                options={offspringStatusOptions}
-                                                onChange={(value) => updateStatus(item.id, value)}
-                                                disabled={['terjual', 'mati', 'promosi'].includes(item.status_farm)}
-                                                compact
-                                            />
+                                        {/* Row 2: Date/Age + Status */}
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs text-gray-500">
+                                                {format(new Date(item.birth_date), 'dd MMM yyyy')} · {calculateAge(item.birth_date)}
+                                            </span>
+                                            <div onClick={(e) => e.stopPropagation()}>
+                                                <StatusDropdown
+                                                    value={item.status_farm}
+                                                    options={offspringStatusOptions}
+                                                    onChange={(value) => updateStatus(item.id, value)}
+                                                    disabled={['terjual', 'mati', 'promosi'].includes(item.status_farm)}
+                                                    compact
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
