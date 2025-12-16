@@ -127,12 +127,18 @@ export function LivestockDetailModal({ livestock, onClose, onDelete }: Livestock
                                 <h2 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">
                                     {livestock.id_indukan}
                                 </h2>
-                                {livestock.notes?.includes('Dipromosikan dari anakan') && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex-shrink-0">
-                                        🔗 Breeding
+                                {livestock.acquisition_source === 'farm_breeding' && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded flex-shrink-0">
+                                        ★ Breeding
                                     </span>
                                 )}
                             </div>
+                            {/* Show original offspring ID for promoted livestock */}
+                            {livestock.notes?.match(/Dipromosikan dari anakan (\S+)/) && (
+                                <p className="text-xs text-purple-600 mt-0.5">
+                                    Asal: {livestock.notes.match(/Dipromosikan dari anakan (\S+)/)?.[1]}
+                                </p>
+                            )}
                             <p className="text-xs sm:text-sm text-gray-600 mt-0.5">{livestock.settings_breeds?.breed_name}</p>
                         </div>
                         <div className="flex items-center gap-1 sm:gap-2 ml-2 flex-shrink-0">
