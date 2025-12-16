@@ -155,15 +155,17 @@ export function OffspringDetailModal({ offspringId, onClose }: OffspringDetailMo
         }
     }
 
-    const getStatusBadge = (status: string) => {
-        const colors: Record<string, string> = {
-            anakan: 'bg-yellow-100 text-yellow-800',
-            pertumbuhan: 'bg-blue-100 text-blue-800',
-            siap_jual: 'bg-green-100 text-green-800',
-            mati: 'bg-gray-500 text-white',
-            terjual: 'bg-orange-500 text-white',
+    // Get status badge styling and label - consistent with OffspringPage list view
+    const getStatusBadge = (status: string): { color: string; label: string } => {
+        const statusMap: Record<string, { color: string; label: string }> = {
+            anakan: { color: 'bg-yellow-100 text-yellow-700', label: 'Anakan' },
+            pertumbuhan: { color: 'bg-blue-100 text-blue-700', label: 'Tumbuh' },
+            siap_jual: { color: 'bg-orange-100 text-orange-700', label: 'Siap Jual' },
+            terjual: { color: 'bg-green-100 text-green-700', label: 'Terjual' },
+            mati: { color: 'bg-gray-200 text-gray-600', label: 'Mati' },
+            promosi: { color: 'bg-purple-100 text-purple-700', label: 'Promosi' },
         }
-        return colors[status] || 'bg-gray-100 text-gray-800'
+        return statusMap[status] || { color: 'bg-gray-100 text-gray-600', label: status }
     }
 
     const getRecordTypeBadge = (type: string) => {
@@ -427,8 +429,8 @@ export function OffspringDetailModal({ offspringId, onClose }: OffspringDetailMo
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
                                             <label className="block text-xs font-medium text-gray-500 mb-1">Status Anakan</label>
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(offspring.status_farm)}`}>
-                                                {offspring.status_farm.replace(/_/g, ' ')}
+                                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getStatusBadge(offspring.status_farm).color}`}>
+                                                {getStatusBadge(offspring.status_farm).label}
                                             </span>
                                         </div>
                                         <div>
