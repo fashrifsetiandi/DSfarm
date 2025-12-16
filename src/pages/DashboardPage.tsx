@@ -60,10 +60,13 @@ export function DashboardPage() {
 
     const fetchStats = async () => {
         try {
+            // Offspring uses different status values: ['anakan', 'pertumbuhan', 'siap_jual'] = infarm
+            const offspringInfarmStatuses = ['anakan', 'pertumbuhan', 'siap_jual']
+
             // Fetch main stats - filter to INFARM only for livestock/offspring
             const [livestockRes, offspringRes, kandangRes, transactionsRes] = await Promise.all([
                 supabase.from('livestock').select('id', { count: 'exact', head: true }).eq('status_farm', 'infarm'),
-                supabase.from('offspring').select('id', { count: 'exact', head: true }).eq('status_farm', 'infarm'),
+                supabase.from('offspring').select('id', { count: 'exact', head: true }).in('status_farm', offspringInfarmStatuses),
                 supabase.from('kandang').select('id', { count: 'exact', head: true }),
                 supabase.from('financial_transactions').select('transaction_type, amount'),
             ])
