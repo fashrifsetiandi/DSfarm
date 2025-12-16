@@ -13,6 +13,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, DollarSign, Check, AlertCircle } from 'lucide-react'
+import { getOffspringStatus } from '@/utils/dateUtils'
 
 // ======================================================
 // INTERFACES
@@ -75,16 +76,23 @@ export function BatchSellForm({ type, onClose, onSuccess }: Props) {
         setFetching(true)
         try {
             if (isOffspring) {
-                // For offspring, use id_anakan
+                // Fetch ALL infarm offspring to calculate status client-side
                 const { data, error } = await supabase
                     .from('offspring')
-                    .select('id, id_anakan, weight_kg, gender')
-                    .eq('status_farm', 'siap_jual')
+                    .select('id, id_anakan, weight_kg, gender, birth_date, status_farm')
+                    .in('status_farm', ['anakan', 'pertumbuhan', 'siap_jual']) // Get all infarm
                     .order('id_anakan')
 
                 if (error) throw error
 
-                setAvailableItems((data || []).map((item: any) => ({
+                // Filter for 'siap_jual' based on age OR explicit status
+                const readyToSell = (data || []).filter((item: any) => {
+                    const calculatedStatus = getOffspringStatus(item.birth_date)
+                    // Include if calculated is ready to sell OR explicitly marked ready (legacy)
+                    return calculatedStatus === 'siap_jual' || item.status_farm === 'siap_jual'
+                })
+
+                setAvailableItems(readyToSell.map((item: any) => ({
                     id: item.id,
                     code: item.id_anakan,
                     weight: item.weight_kg,

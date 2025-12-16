@@ -48,3 +48,24 @@ export function calculateAge(birthDate: string): string {
 export function formatDate(date: string): string {
     return format(new Date(date), 'dd MMM yyyy')
 }
+
+/**
+ * Calculate offspring status based on age
+ * 0-1 month: anakan
+ * 1-3 months: pertumbuhan
+ * 3+ months: siap_jual
+ */
+export function getOffspringStatus(birthDate: string): 'anakan' | 'pertumbuhan' | 'siap_jual' {
+    const birth = new Date(birthDate)
+    const now = new Date()
+
+    const yearDiff = now.getFullYear() - birth.getFullYear()
+    const monthDiff = now.getMonth() - birth.getMonth()
+    const ageInMonths = yearDiff * 12 + monthDiff
+    const dayDiff = now.getDate() - birth.getDate()
+    const adjustedMonths = dayDiff < 0 ? ageInMonths - 1 : ageInMonths
+
+    if (adjustedMonths < 1) return 'anakan'
+    if (adjustedMonths < 3) return 'pertumbuhan'
+    return 'siap_jual'
+}
