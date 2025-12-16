@@ -4,7 +4,7 @@ import { Search, Plus, DollarSign } from 'lucide-react'
 import { format } from 'date-fns'
 import { OffspringDetailModal } from '@/components/offspring/OffspringDetailModal'
 import { OffspringAddForm } from '@/components/offspring/OffspringAddForm'
-import { StatusDropdown, offspringStatusOptions } from '@/components/shared/StatusDropdown'
+
 import { BatchSellForm } from '@/components/shared/BatchSellForm'
 import { calculateAge } from '@/utils/dateUtils'
 import { useOffspringList, useInvalidateOffspring } from '@/hooks/useQueries'
@@ -93,24 +93,6 @@ export function OffspringPage() {
 
         return matchesSearch && matchesTab
     })
-
-    // Update status directly (for StatusDropdown)
-    // Kita pakai 'Try-Catch' pattern untuk menangani 'Database Errors' agar user tahu jika update gagal
-    const updateStatus = async (id: string, value: string) => {
-        const { error } = await supabase
-            .from('offspring')
-            .update({ status_farm: value })
-            .eq('id', id)
-
-        if (error) {
-            console.error('Failed to update offspring status:', error)
-            alert('Gagal mengubah status: ' + error.message)
-            return
-        }
-
-        // Refetch to update cache
-        refetch()
-    }
 
     const isNew = (createdAt: string) => {
         const minutesSince = Math.floor(
@@ -331,20 +313,28 @@ export function OffspringPage() {
                                                 {item.latest_weight || item.weight_kg ? `${item.latest_weight || item.weight_kg} kg` : '-'}
                                             </span>
                                         </div>
-                                        {/* Row 2: Date/Age + Status */}
+                                        {/* Row 2: Date/Age + Status Badge (read-only, auto-calculated by age) */}
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs text-gray-500">
                                                 {format(new Date(item.birth_date), 'dd MMM yyyy')} · {calculateAge(item.birth_date)}
                                             </span>
-                                            <div onClick={(e) => e.stopPropagation()}>
-                                                <StatusDropdown
-                                                    value={item.status_farm}
-                                                    options={offspringStatusOptions}
-                                                    onChange={(value) => updateStatus(item.id, value)}
-                                                    disabled={['terjual', 'mati', 'promosi'].includes(item.status_farm)}
-                                                    compact
-                                                />
-                                            </div>
+                                            {/* Status Badge - Read only since status is auto-calculated */}
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.status_farm === 'anakan' ? 'bg-yellow-100 text-yellow-700' :
+                                                item.status_farm === 'pertumbuhan' ? 'bg-blue-100 text-blue-700' :
+                                                    item.status_farm === 'siap_jual' ? 'bg-orange-100 text-orange-700' :
+                                                        item.status_farm === 'terjual' ? 'bg-green-100 text-green-700' :
+                                                            item.status_farm === 'mati' ? 'bg-gray-100 text-gray-700' :
+                                                                item.status_farm === 'promosi' ? 'bg-purple-100 text-purple-700' :
+                                                                    'bg-gray-100 text-gray-700'
+                                                }`}>
+                                                {item.status_farm === 'anakan' ? '🐣 Anakan' :
+                                                    item.status_farm === 'pertumbuhan' ? '📈 Tumbuh' :
+                                                        item.status_farm === 'siap_jual' ? '🛒 Siap Jual' :
+                                                            item.status_farm === 'terjual' ? '✅ Terjual' :
+                                                                item.status_farm === 'mati' ? '💀 Mati' :
+                                                                    item.status_farm === 'promosi' ? '⬆️ Promosi' :
+                                                                        item.status_farm}
+                                            </span>
                                         </div>
                                     </div>
                                 ))}
@@ -415,14 +405,24 @@ export function OffspringPage() {
                                                 }
                                             </td>
 
-                                            {/* Status */}
-                                            <td className="px-4 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                                                <StatusDropdown
-                                                    value={item.status_farm}
-                                                    options={offspringStatusOptions}
-                                                    onChange={(value) => updateStatus(item.id, value)}
-                                                    disabled={['terjual', 'mati', 'promosi'].includes(item.status_farm)}
-                                                />
+                                            {/* Status Badge - Read only since status is auto-calculated */}
+                                            <td className="px-4 py-3 whitespace-nowrap">
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.status_farm === 'anakan' ? 'bg-yellow-100 text-yellow-700' :
+                                                    item.status_farm === 'pertumbuhan' ? 'bg-blue-100 text-blue-700' :
+                                                        item.status_farm === 'siap_jual' ? 'bg-orange-100 text-orange-700' :
+                                                            item.status_farm === 'terjual' ? 'bg-green-100 text-green-700' :
+                                                                item.status_farm === 'mati' ? 'bg-gray-100 text-gray-700' :
+                                                                    item.status_farm === 'promosi' ? 'bg-purple-100 text-purple-700' :
+                                                                        'bg-gray-100 text-gray-700'
+                                                    }`}>
+                                                    {item.status_farm === 'anakan' ? '🐣 Anakan' :
+                                                        item.status_farm === 'pertumbuhan' ? '📈 Tumbuh' :
+                                                            item.status_farm === 'siap_jual' ? '🛒 Siap Jual' :
+                                                                item.status_farm === 'terjual' ? '✅ Terjual' :
+                                                                    item.status_farm === 'mati' ? '💀 Mati' :
+                                                                        item.status_farm === 'promosi' ? '⬆️ Promosi' :
+                                                                            item.status_farm}
+                                                </span>
                                             </td>
                                         </tr>
                                     ))}
