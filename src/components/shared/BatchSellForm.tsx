@@ -172,7 +172,11 @@ export function BatchSellForm({ type, onClose, onSuccess }: Props) {
                 await supabase
                     .from(table)
                     .update({
-                        status_farm: 'terjual',
+                        // Offspring uses status_farm, Livestock uses status
+                        ...(isOffspring
+                            ? { status_farm: 'terjual' }
+                            : { status: 'terjual', status_farm: 'terjual' }
+                        ),
                         kandang_id: null, // Clear kandang - triggers occupancy decrement
                         ...(isOffspring
                             ? { status_notes: `Dijual ke ${buyerName || 'pembeli'} pada ${saleDate}` }
