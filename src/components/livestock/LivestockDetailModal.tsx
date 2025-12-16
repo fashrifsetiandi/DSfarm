@@ -136,7 +136,7 @@ export function LivestockDetailModal({ livestock, onClose, onDelete }: Livestock
                             {/* Show original offspring ID for promoted livestock */}
                             {livestock.notes?.match(/Dipromosikan dari anakan (\S+)/) && (
                                 <p className="text-xs text-purple-600 mt-0.5">
-                                    Asal: {livestock.notes.match(/Dipromosikan dari anakan (\S+)/)?.[1]}
+                                    {livestock.notes.match(/Dipromosikan dari anakan (\S+)/)?.[1]}
                                 </p>
                             )}
                             <p className="text-xs sm:text-sm text-gray-600 mt-0.5">{livestock.settings_breeds?.breed_name}</p>
