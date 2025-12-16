@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle, Calendar } from 'lucide-react'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface Birth {
     id: string
@@ -246,10 +247,13 @@ export function BreedingRecordForm({ livestockId, motherBirthDate, mode = 'creat
     const birthDate = calculateBirthDate()
     const weaningRate = calculateWeaningSuccessRate()
 
+    // Lock background scroll when modal is open
+    useScrollLock(true)
+
     return (
         <>
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3">
+                <div className="bg-white rounded-xl shadow-xl w-full max-w-lg sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                     {/* Header */}
                     <div className="sticky top-0 bg-white px-6 py-4 border-b flex items-center justify-between">
                         <div className="flex items-center gap-2">
