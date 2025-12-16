@@ -95,9 +95,18 @@ export function OffspringPage() {
     })
 
     // Update status directly (for StatusDropdown)
+    // Kita pakai 'Try-Catch' pattern untuk menangani 'Database Errors' agar user tahu jika update gagal
     const updateStatus = async (id: string, value: string) => {
-        // @ts-ignore - Supabase types limitation
-        await supabase.from('offspring').update({ status_farm: value }).eq('id', id)
+        const { error } = await supabase
+            .from('offspring')
+            .update({ status_farm: value })
+            .eq('id', id)
+
+        if (error) {
+            console.error('Failed to update offspring status:', error)
+            alert('Gagal mengubah status: ' + error.message)
+            return
+        }
 
         // Refetch to update cache
         refetch()

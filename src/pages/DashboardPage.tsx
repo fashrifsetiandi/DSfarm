@@ -18,11 +18,18 @@ type TargetType = 'indukan' | 'anakan' | null
 export function DashboardPage() {
     const { user } = useAuth()
     const [stats, setStats] = useState({
-        livestock: 0,
-        offspring: 0,
+        livestock: 0,       // Infarm only
+        offspring: 0,       // Infarm only
         kandang: 0,
         totalIncome: 0,
         totalExpense: 0,
+    })
+    // Production stats - all time records
+    const [productionStats, setProductionStats] = useState({
+        totalOffspring: 0,  // All offspring ever
+        terjual: 0,         // Sold
+        mati: 0,            // Dead
+        promosi: 0,         // Promoted to breeding stock
     })
     const [loading, setLoading] = useState(true)
 
@@ -53,11 +60,20 @@ export function DashboardPage() {
 
     const fetchStats = async () => {
         try {
+            // Fetch main stats - filter to INFARM only for livestock/offspring
             const [livestockRes, offspringRes, kandangRes, transactionsRes] = await Promise.all([
-                supabase.from('livestock').select('id', { count: 'exact', head: true }),
-                supabase.from('offspring').select('id', { count: 'exact', head: true }),
+                supabase.from('livestock').select('id', { count: 'exact', head: true }).eq('status_farm', 'infarm'),
+                supabase.from('offspring').select('id', { count: 'exact', head: true }).eq('status_farm', 'infarm'),
                 supabase.from('kandang').select('id', { count: 'exact', head: true }),
                 supabase.from('financial_transactions').select('transaction_type, amount'),
+            ])
+
+            // Fetch production breakdown - all offspring by status
+            const [totalRes, terjualRes, matiRes, promosiRes] = await Promise.all([
+                supabase.from('offspring').select('id', { count: 'exact', head: true }),
+                supabase.from('offspring').select('id', { count: 'exact', head: true }).eq('status_farm', 'terjual'),
+                supabase.from('offspring').select('id', { count: 'exact', head: true }).eq('status_farm', 'mati'),
+                supabase.from('offspring').select('id', { count: 'exact', head: true }).eq('status_farm', 'promosi'),
             ])
 
             const transactions = (transactionsRes.data || []) as Array<{ transaction_type: string; amount: number }>
@@ -70,6 +86,13 @@ export function DashboardPage() {
                 kandang: kandangRes.count || 0,
                 totalIncome: income,
                 totalExpense: expense,
+            })
+
+            setProductionStats({
+                totalOffspring: totalRes.count || 0,
+                terjual: terjualRes.count || 0,
+                mati: matiRes.count || 0,
+                promosi: promosiRes.count || 0,
             })
         } catch (err) {
             console.error('Error fetching stats:', err)
@@ -158,7 +181,7 @@ export function DashboardPage() {
                     <p className="text-xs xs:text-sm sm:text-base text-gray-600 mt-1">Selamat datang, {user?.email?.split('@')[0]}</p>
                 </div>
 
-                {/* Stats Grid */}
+                {/* Stats Grid - Shows INFARM counts only */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-6 mb-4 xs:mb-6 sm:mb-8">
                     <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
                         <div className="flex items-center justify-between mb-1.5 xs:mb-2 sm:mb-4">
@@ -166,7 +189,7 @@ export function DashboardPage() {
                             <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.livestock}</span>
                         </div>
                         <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Indukan</h3>
-                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total kelinci</p>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">di farm</p>
                     </div>
 
                     <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
@@ -175,7 +198,7 @@ export function DashboardPage() {
                             <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.offspring}</span>
                         </div>
                         <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Anakan</h3>
-                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total anakan</p>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">di farm</p>
                     </div>
 
                     <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
@@ -184,7 +207,7 @@ export function DashboardPage() {
                             <span className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">{stats.kandang}</span>
                         </div>
                         <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Kandang</h3>
-                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Total kandang</p>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">aktif</p>
                     </div>
 
                     <div className="bg-white rounded-lg shadow p-3 xs:p-4 sm:p-6">
@@ -196,7 +219,30 @@ export function DashboardPage() {
                             </span>
                         </div>
                         <h3 className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">Saldo</h3>
-                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">Balance</p>
+                        <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 mt-0.5">balance</p>
+                    </div>
+                </div>
+
+                {/* Production Stats - All Time */}
+                <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-4 xs:mb-6 sm:mb-8">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">📊 Rekap Produksi Anakan</h3>
+                    <div className="grid grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
+                        <div className="text-center p-2 xs:p-3 bg-gray-50 rounded-lg">
+                            <p className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">{productionStats.totalOffspring}</p>
+                            <p className="text-[10px] xs:text-xs text-gray-500">Total Lahir</p>
+                        </div>
+                        <div className="text-center p-2 xs:p-3 bg-orange-50 rounded-lg">
+                            <p className="text-lg xs:text-xl sm:text-2xl font-bold text-orange-600">{productionStats.terjual}</p>
+                            <p className="text-[10px] xs:text-xs text-gray-500">Terjual</p>
+                        </div>
+                        <div className="text-center p-2 xs:p-3 bg-red-50 rounded-lg">
+                            <p className="text-lg xs:text-xl sm:text-2xl font-bold text-red-600">{productionStats.mati}</p>
+                            <p className="text-[10px] xs:text-xs text-gray-500">Mati</p>
+                        </div>
+                        <div className="text-center p-2 xs:p-3 bg-green-50 rounded-lg">
+                            <p className="text-lg xs:text-xl sm:text-2xl font-bold text-green-600">{productionStats.promosi}</p>
+                            <p className="text-[10px] xs:text-xs text-gray-500">Promosi</p>
+                        </div>
                     </div>
                 </div>
 
