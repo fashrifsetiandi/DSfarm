@@ -61,6 +61,14 @@ const formatCurrency = (amount: number): string => {
     }).format(amount)
 }
 
+/** Check if transaction is new (created within 1 minute) */
+const isNew = (createdAt: string): boolean => {
+    const created = new Date(createdAt)
+    const now = new Date()
+    const diffMs = now.getTime() - created.getTime()
+    return diffMs < 60000 // 1 minute in ms
+}
+
 /** Filter transaksi berdasarkan periode */
 const filterByPeriod = (transactions: Transaction[], period: PeriodFilter): Transaction[] => {
     if (period === 'all') return transactions
@@ -164,7 +172,7 @@ export function FinancePage() {
             const { data, error } = await supabase
                 .from('financial_transactions')
                 .select(`*, settings_finance_categories (category_name, category_code)`)
-                .order('transaction_date', { ascending: false })
+                .order('created_at', { ascending: false }) // Sort by created_at for newest first
 
             if (error) throw error
             setTransactions((data || []) as Transaction[])
@@ -433,7 +441,14 @@ export function FinancePage() {
                                             className="hover:bg-gray-50 cursor-pointer"
                                         >
                                             <td className="px-4 py-3 text-sm text-gray-900">
-                                                {format(new Date(t.transaction_date), 'dd MMM yyyy')}
+                                                <div className="flex items-center gap-2">
+                                                    <span>{format(new Date(t.transaction_date), 'dd MMM yyyy')}</span>
+                                                    {isNew(t.created_at) && (
+                                                        <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-green-500 text-white">
+                                                            NEW
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="text-sm font-medium text-gray-900">
