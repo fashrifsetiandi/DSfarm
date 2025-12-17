@@ -80,7 +80,7 @@ export function OffspringHealthRecordForm({ offspringId, birthDate, onClose, onS
                                 max={new Date().toISOString().split('T')[0]}
                                 value={formData.record_date}
                                 onChange={(e) => setFormData({ ...formData, record_date: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                             />
                             <p className="text-xs text-gray-500 mt-1">
                                 Min: {new Date(birthDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} (tanggal lahir)
@@ -95,7 +95,7 @@ export function OffspringHealthRecordForm({ offspringId, birthDate, onClose, onS
                                 required
                                 value={formData.record_type}
                                 onChange={(e) => setFormData({ ...formData, record_type: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                             >
                                 <option value="checkup">Checkup</option>
                                 <option value="vaksin">Vaksinasi</option>

@@ -85,8 +85,8 @@ export function HealthRecordForm({ livestockId, birthDate, onClose, onSuccess }:
                     )}
 
                     <div className="space-y-3">
-                        {/* Date & Type in row */}
-                        <div className="grid grid-cols-2 gap-2">
+                        {/* Date & Type in row (stack on mobile) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 mb-1">Tanggal *</label>
                                 <input
@@ -96,7 +96,7 @@ export function HealthRecordForm({ livestockId, birthDate, onClose, onSuccess }:
                                     max={new Date().toISOString().split('T')[0]}
                                     value={formData.record_date}
                                     onChange={(e) => setFormData({ ...formData, record_date: e.target.value })}
-                                    className="w-full px-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                    className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                                 />
                             </div>
                             <div>
@@ -105,7 +105,7 @@ export function HealthRecordForm({ livestockId, birthDate, onClose, onSuccess }:
                                     required
                                     value={formData.record_type}
                                     onChange={(e) => setFormData({ ...formData, record_type: e.target.value })}
-                                    className="w-full px-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                    className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                                 >
                                     <option value="checkup">Checkup</option>
                                     <option value="vaksin">Vaksin</option>

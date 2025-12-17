@@ -80,7 +80,7 @@ export function GrowthLogForm({ livestockId, birthDate, onClose, onSuccess }: Gr
                                 max={new Date().toISOString().split('T')[0]}
                                 value={formData.measurement_date}
                                 onChange={(e) => setFormData({ ...formData, measurement_date: e.target.value })}
-                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                             />
                         </div>
 
