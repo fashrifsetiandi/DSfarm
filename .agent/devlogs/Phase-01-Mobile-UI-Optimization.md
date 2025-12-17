@@ -24,6 +24,9 @@
 | ✅ Done | **Safari iOS Touch** | Fixed touch event handling issues |
 | ✅ Done | **Livestock Sale Bug** | Fixed status not updating to "terjual" |
 | ✅ Done | **Transaction Sorting** | Newest first + NEW badge for 1 minute |
+| ✅ Done | **Modal Scroll Lock** | Prevent background scrolling when modal is open |
+| ✅ Done | **Promoted Display** | Show original offspring ID for promoted livestock |
+| ✅ Done | **Batch Sell Offspring** | Fix missing "Siap Jual" items in batch sell list |
 
 ---
 
@@ -43,12 +46,12 @@
 >
 > **🇺🇸 Keyword:** *Touch Events, Event Propagation, stopPropagation*
 
-#### 3. Conditional Schema Updates
-> **🎓 Teori:** Dalam database, satu tabel bisa punya kolom berbeda dengan tabel lain meski fungsionalitasnya mirip.
+#### 3. Client-Side vs Server-Side Status
+> **🎓 Teori:** Kadang logic bisnis (seperti status "Siap Jual" berdasarkan umur) dihitung di Frontend (Client-side), tapi Database (Server-side) menyimpan status statis.
 > 
-> **💼 Praktek:** Tabel `livestock` pakai kolom `status`, sedangkan `offspring` pakai kolom `status_farm`. Kode harus conditionally update kolom yang tepat.
+> **💼 Praktek:** Kita buat utility function `getOffspringStatus` untuk sinkronisasi logic perhitungan umur di Frontend dengan query Database, agar data yang tampil konsisten.
 >
-> **🇺🇸 Keyword:** *Schema Design, Conditional Logic, Table Structure*
+> **🇺🇸 Keyword:** *Business Logic, Client-Side Calculation, Data Consistency*
 
 ---
 
@@ -78,6 +81,20 @@ Buttons on Safari iOS tidak respond ke tap dengan benar
 - **Penyebab:** CSS `min-height: 44px` rule terlalu broad + preventDefault blocking scroll
 - **Fix:** Remove broad rule, add `touch-action: manipulation`, use stopPropagation instead
 
+**Bug 4: Background Scrolled with Modal Open**
+```
+User could scroll the page behind the modal
+```
+- **Penyebab:** Default browser behavior tidak mengunci `body` scroll.
+- **Fix:** Created `useScrollLock` hook to fix `body` position and overflow.
+
+**Bug 5: Missing Offspring in Batch Sell**
+```
+"Siap Jual" items missing from Batch Sell list
+```
+- **Penyebab:** Query DB cari string "siap_jual" padahal status itu computed by age di frontend.
+- **Fix:** Fetch all infarm offspring and filter using `getOffspringStatus` utility.
+
 </details>
 
 ---
@@ -91,9 +108,19 @@ src/
 │   ├── OffspringPage.tsx    # Summary cards + compact mobile layout
 │   └── FinancePage.tsx      # Transaction sorting + NEW badge
 ├── components/
-│   └── shared/
-│       ├── StatusDropdown.tsx   # Upward positioning + Safari fixes
-│       └── BatchSellForm.tsx    # Fixed livestock status column
+│   ├── shared/
+│   │   ├── StatusDropdown.tsx   # Upward positioning + Safari fixes
+│   │   └── BatchSellForm.tsx    # Fixed livestock status & offspring query
+│   ├── livestock/
+│   │   ├── GrowthLogForm.tsx    # Scroll lock + compact style
+│   │   ├── HealthRecordForm.tsx # Scroll lock + compact style
+│   │   └── BreedingRecordForm.tsx # Scroll lock + compact style
+│   └── offspring/
+│       └── OffspringGrowthLogForm.tsx # Scroll lock + compact style
+├── hooks/
+│   └── useScrollLock.ts         # New hook for modal scroll locking
+├── utils/
+│   └── dateUtils.ts             # Added getOffspringStatus helper
 └── index.css                    # Removed problematic min-height rule
 
 tailwind.config.js               # Added xs: 375px breakpoint
@@ -122,6 +149,9 @@ tailwind.config.js               # Added xs: 375px breakpoint
 | `dc861b2` | style: compact 2-row mobile cards with inline status |
 | `9a03e58` | fix: BatchSellForm now updates correct status column |
 | `74a9325` | feat: sort transactions by created_at and add NEW badge |
+| `78c732d` | fix: add scroll lock to modals and improve mobile form styling |
+| `266b5a8` | style: show only offspring ID or breed name, not both |
+| `daac403` | fix: sync batch sell offspring query with age-based status |
 
 ---
 
