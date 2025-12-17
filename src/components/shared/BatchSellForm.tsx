@@ -14,6 +14,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, DollarSign, Check, AlertCircle } from 'lucide-react'
 import { getOffspringStatus } from '@/utils/dateUtils'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 // ======================================================
 // INTERFACES
@@ -55,6 +56,9 @@ const formatCurrency = (amount: number): string => {
 export function BatchSellForm({ type, onClose, onSuccess }: Props) {
     const { user } = useAuth()
     const isOffspring = type === 'offspring'
+
+    // Lock background scroll
+    useScrollLock(true)
 
     // State
     const [loading, setLoading] = useState(false)
@@ -230,7 +234,7 @@ export function BatchSellForm({ type, onClose, onSuccess }: Props) {
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 sm:mx-auto max-h-[90vh] flex flex-col">
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-orange-500 to-orange-600 rounded-t-xl">
                     <div className="flex items-center gap-3">

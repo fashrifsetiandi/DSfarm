@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface LivestockFormData {
     breed_id: string
@@ -30,6 +31,10 @@ interface Kandang {
 
 export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
+
+    // Lock background scroll
+    useScrollLock(true)
+
     const [breeds, setBreeds] = useState<Breed[]>([])
     const [kandangs, setKandangs] = useState<Kandang[]>([])
     const [loading, setLoading] = useState(false)
@@ -161,7 +166,7 @@ export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; 
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-xl shadow-xl w-[95%] max-w-2xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b">
                     <h2 className="text-xl font-bold">Tambah Indukan Baru</h2>
@@ -293,6 +298,7 @@ export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; 
                                 <input
                                     type="date"
                                     name="acquisition_date"
+                                    min={formData.birth_date} // Validate: Cannot arrive before born
                                     max={new Date().toISOString().split('T')[0]}
                                     value={formData.acquisition_date}
                                     onChange={handleChange}

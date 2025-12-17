@@ -5,13 +5,14 @@ import { X, AlertCircle } from 'lucide-react'
 interface OffspringSelectorProps {
     title: string
     onClose: () => void
-    onSelect: (offspringId: string, idAnakan: string) => void
+    onSelect: (offspringId: string, idAnakan: string, birthDate: string) => void
 }
 
 interface Offspring {
     id: string
     id_anakan: string
     gender: string | null
+    birth_date: string
     status_farm: string
     mother_livestock?: {
         id_indukan: string
@@ -35,6 +36,7 @@ export function OffspringSelector({ title, onClose, onSelect }: OffspringSelecto
                     id,
                     id_anakan,
                     gender,
+                    birth_date,
                     status_farm,
                     mother_livestock:mother_id (
                         id_indukan
@@ -95,7 +97,7 @@ export function OffspringSelector({ title, onClose, onSelect }: OffspringSelecto
                             {filteredOffspring.map((item) => (
                                 <button
                                     key={item.id}
-                                    onClick={() => onSelect(item.id, item.id_anakan)}
+                                    onClick={() => onSelect(item.id, item.id_anakan, item.birth_date)}
                                     className="w-full p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors text-left"
                                 >
                                     <div className="flex items-center justify-between">

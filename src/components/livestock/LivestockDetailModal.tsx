@@ -9,6 +9,7 @@ import { BreedingTab } from './BreedingTab'
 import { SellLivestockForm } from './SellLivestockForm'
 import { StatusDropdown, maleStatusOptions, femaleStatusOptions, statusFarmOptions } from '../shared/StatusDropdown'
 import { supabase } from '@/lib/supabase'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface Livestock {
     id: string
@@ -80,6 +81,9 @@ export function LivestockDetailModal({ livestock, onClose, onDelete }: Livestock
     const { data: growthLogs = [], refetch: refetchGrowthLogs } = useLivestockGrowthLogs(livestock.id)
     const { data: healthRecords = [], refetch: refetchHealthRecords } = useLivestockHealthRecords(livestock.id)
 
+    // Lock background scroll
+    useScrollLock(true)
+
     const handleDelete = async () => {
         try {
             const { error } = await supabase
@@ -118,7 +122,7 @@ export function LivestockDetailModal({ livestock, onClose, onDelete }: Livestock
     return (
         <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50">
             {/* Modal - Full screen on mobile, centered on desktop */}
-            <div className="bg-white w-full h-[95vh] sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:mx-4 sm:rounded-xl shadow-2xl flex flex-col rounded-t-2xl sm:rounded-xl">
+            <div className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:mx-4 sm:rounded-xl shadow-2xl flex flex-col rounded-t-2xl sm:rounded-xl">
                 {/* Header */}
                 <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex-shrink-0">
                     <div className="flex items-start justify-between">
@@ -449,6 +453,7 @@ export function LivestockDetailModal({ livestock, onClose, onDelete }: Livestock
                             {showGrowthForm && (
                                 <GrowthLogForm
                                     livestockId={livestock.id}
+                                    birthDate={livestock.birth_date}
                                     onClose={() => setShowGrowthForm(false)}
                                     onSuccess={() => {
                                         refetchGrowthLogs()

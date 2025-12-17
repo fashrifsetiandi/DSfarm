@@ -129,8 +129,8 @@ export function DashboardPage() {
         }
     }
 
-    const onLivestockSelected = (livestockId: string, livestockCode: string) => {
-        setSelectedLivestock({ id: livestockId, code: livestockCode })
+    const onLivestockSelected = (livestockId: string, livestockCode: string, birthDate: string) => {
+        setSelectedLivestock({ id: livestockId, code: livestockCode, birth_date: birthDate })
         setShowLivestockSelector(false)
 
         if (pendingAction === 'breeding') {
@@ -144,8 +144,8 @@ export function DashboardPage() {
         }
     }
 
-    const onOffspringSelected = (offspringId: string, offspringCode: string) => {
-        setSelectedOffspring({ id: offspringId, code: offspringCode })
+    const onOffspringSelected = (offspringId: string, offspringCode: string, birthDate: string) => {
+        setSelectedOffspring({ id: offspringId, code: offspringCode, birth_date: birthDate })
         setShowOffspringSelector(false)
 
         if (pendingAction === 'health') {
@@ -437,6 +437,7 @@ export function DashboardPage() {
                 {showGrowthForm && selectedLivestock && (
                     <GrowthLogForm
                         livestockId={selectedLivestock.id}
+                        birthDate={selectedLivestock.birth_date || ''}
                         onClose={() => {
                             setShowGrowthForm(false)
                             setSelectedLivestock(null)
@@ -471,6 +472,7 @@ export function DashboardPage() {
                 {showOffspringGrowthForm && selectedOffspring && (
                     <OffspringGrowthLogForm
                         offspringId={selectedOffspring.id}
+                        birthDate={selectedOffspring.birth_date || ''}
                         onClose={() => {
                             setShowOffspringGrowthForm(false)
                             setSelectedOffspring(null)

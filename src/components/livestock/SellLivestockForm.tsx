@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle, DollarSign } from 'lucide-react'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface SellLivestockFormProps {
     livestockId: string
@@ -12,6 +13,10 @@ interface SellLivestockFormProps {
 
 export function SellLivestockForm({ livestockId, livestockCode, onClose, onSuccess }: SellLivestockFormProps) {
     const { user } = useAuth()
+
+    // Lock background scroll
+    useScrollLock(true)
+
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState({
@@ -80,7 +85,7 @@ export function SellLivestockForm({ livestockId, livestockCode, onClose, onSucce
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-xl shadow-xl w-[95%] max-w-md" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-6 border-b bg-gradient-to-r from-orange-500 to-orange-600">
                     <div className="flex items-center gap-3">
                         <DollarSign className="h-6 w-6 text-white" />

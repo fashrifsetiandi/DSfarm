@@ -6,11 +6,12 @@ import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface OffspringGrowthLogFormProps {
     offspringId: string
+    birthDate: string
     onClose: () => void
     onSuccess: () => void
 }
 
-export function OffspringGrowthLogForm({ offspringId, onClose, onSuccess }: OffspringGrowthLogFormProps) {
+export function OffspringGrowthLogForm({ offspringId, birthDate, onClose, onSuccess }: OffspringGrowthLogFormProps) {
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -80,6 +81,7 @@ export function OffspringGrowthLogForm({ offspringId, onClose, onSuccess }: Offs
                             <input
                                 type="date"
                                 required
+                                min={birthDate}
                                 max={new Date().toISOString().split('T')[0]}
                                 value={formData.measurement_date}
                                 onChange={(e) => setFormData({ ...formData, measurement_date: e.target.value })}

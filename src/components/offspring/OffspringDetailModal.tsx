@@ -598,6 +598,7 @@ export function OffspringDetailModal({ offspringId, onClose }: OffspringDetailMo
             {showGrowthForm && (
                 <OffspringGrowthLogForm
                     offspringId={offspringId}
+                    birthDate={offspring.birth_date}
                     onClose={() => setShowGrowthForm(false)}
                     onSuccess={() => {
                         fetchGrowthLogs()

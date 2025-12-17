@@ -6,13 +6,14 @@ interface LivestockSelectorProps {
     title: string
     filterGender?: 'jantan' | 'betina' // Optional: filter by gender
     onClose: () => void
-    onSelect: (livestockId: string, idIndukan: string) => void
+    onSelect: (livestockId: string, idIndukan: string, birthDate: string) => void
 }
 
 interface Livestock {
     id: string
     id_indukan: string
     gender: string
+    birth_date: string
     settings_breeds?: {
         breed_name: string
     }
@@ -35,6 +36,7 @@ export function LivestockSelector({ title, filterGender, onClose, onSelect }: Li
                     id,
                     id_indukan,
                     gender,
+                    birth_date,
                     settings_breeds (
                         breed_name
                     )
@@ -101,7 +103,7 @@ export function LivestockSelector({ title, filterGender, onClose, onSelect }: Li
                             {filteredLivestock.map((item) => (
                                 <button
                                     key={item.id}
-                                    onClick={() => onSelect(item.id, item.id_indukan)}
+                                    onClick={() => onSelect(item.id, item.id_indukan, item.birth_date)}
                                     className="w-full p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors text-left"
                                 >
                                     <div className="flex items-center justify-between">

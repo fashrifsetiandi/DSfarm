@@ -6,11 +6,12 @@ import { useScrollLock } from '@/hooks/useScrollLock'
 
 interface GrowthLogFormProps {
     livestockId: string
+    birthDate: string
     onClose: () => void
     onSuccess: () => void
 }
 
-export function GrowthLogForm({ livestockId, onClose, onSuccess }: GrowthLogFormProps) {
+export function GrowthLogForm({ livestockId, birthDate, onClose, onSuccess }: GrowthLogFormProps) {
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -75,6 +76,7 @@ export function GrowthLogForm({ livestockId, onClose, onSuccess }: GrowthLogForm
                             <input
                                 type="date"
                                 required
+                                min={birthDate} // Minimum date is birth date
                                 max={new Date().toISOString().split('T')[0]}
                                 value={formData.measurement_date}
                                 onChange={(e) => setFormData({ ...formData, measurement_date: e.target.value })}
