@@ -156,8 +156,8 @@ export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; 
     const fathers = livestock.filter((l) => l.gender === 'jantan')
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full my-8">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full my-8 max-h-[90vh] overflow-x-hidden overflow-y-auto">
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b">
                     <div>

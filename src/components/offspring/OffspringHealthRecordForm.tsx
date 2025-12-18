@@ -51,8 +51,8 @@ export function OffspringHealthRecordForm({ offspringId, birthDate, onClose, onS
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-x-hidden overflow-y-auto" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-6 border-b">
                     <h2 className="text-xl font-bold">Tambah Catatan Kesehatan</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">

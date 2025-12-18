@@ -79,8 +79,8 @@ export function SellOffspringForm({ offspringId, offspringCode, onClose, onSucce
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-x-hidden" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-6 border-b bg-gradient-to-r from-orange-500 to-orange-600">
                     <div className="flex items-center gap-3">
                         <DollarSign className="h-6 w-6 text-white" />

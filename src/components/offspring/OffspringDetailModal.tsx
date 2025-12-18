@@ -226,9 +226,9 @@ export function OffspringDetailModal({ offspringId, onClose }: OffspringDetailMo
                     </div>
                 </div>
             )}
-            <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 overflow-hidden">
                 {/* Modal - Full screen on mobile, centered on desktop */}
-                <div className="bg-white w-full h-[95vh] sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:mx-4 sm:rounded-xl shadow-2xl flex flex-col rounded-t-2xl sm:rounded-xl">
+                <div className="bg-white w-full h-[95vh] sm:h-auto sm:max-h-[90vh] sm:max-w-4xl sm:mx-4 sm:rounded-xl shadow-2xl flex flex-col rounded-t-2xl sm:rounded-xl overflow-x-hidden">
                     {/* Header */}
                     <div className="px-3 xs:px-4 sm:px-6 py-3 sm:py-5 border-b border-gray-200 flex-shrink-0">
                         <div className="flex items-center justify-between">
