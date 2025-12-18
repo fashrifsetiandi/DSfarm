@@ -50,8 +50,8 @@ export function GrowthLogForm({ livestockId, birthDate, onClose, onSuccess }: Gr
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-x-hidden" onClick={(e) => e.stopPropagation()} style={{ overscrollBehavior: 'contain' }}>
                 {/* Compact header */}
                 <div className="flex justify-between items-center px-4 py-3 border-b">
                     <h2 className="text-base font-bold text-gray-900">Tambah Data Bobot</h2>

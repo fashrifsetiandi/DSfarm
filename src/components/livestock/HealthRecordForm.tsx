@@ -66,8 +66,8 @@ export function HealthRecordForm({ livestockId, birthDate, onClose, onSuccess }:
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-sm max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-sm max-h-[85vh] overflow-y-auto overflow-x-hidden" onClick={(e) => e.stopPropagation()} style={{ overscrollBehavior: 'contain' }}>
                 {/* Compact header */}
                 <div className="flex justify-between items-center px-4 py-3 border-b sticky top-0 bg-white">
                     <h2 className="text-base font-bold text-gray-900">Catatan Kesehatan</h2>

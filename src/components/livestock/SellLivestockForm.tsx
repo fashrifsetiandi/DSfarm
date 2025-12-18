@@ -84,35 +84,36 @@ export function SellLivestockForm({ livestockId, livestockCode, onClose, onSucce
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl w-[95%] max-w-md" onClick={(e) => e.stopPropagation()}>
-                <div className="flex justify-between items-center p-6 border-b bg-gradient-to-r from-orange-500 to-orange-600">
-                    <div className="flex items-center gap-3">
-                        <DollarSign className="h-6 w-6 text-white" />
-                        <h2 className="text-xl font-bold text-white">Jual Indukan</h2>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-3 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-x-hidden" onClick={(e) => e.stopPropagation()} style={{ overscrollBehavior: 'contain' }}>
+                {/* Compact header - matching GrowthLogForm style */}
+                <div className="flex justify-between items-center px-4 py-3 border-b">
+                    <div className="flex items-center gap-2">
+                        <DollarSign className="h-5 w-5 text-orange-600" />
+                        <h2 className="text-base font-bold text-gray-900">Jual Indukan</h2>
                     </div>
-                    <button onClick={onClose} className="text-white/80 hover:text-white">
-                        <X className="h-6 w-6" />
+                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+                        <X className="h-5 w-5" />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6">
+                <form onSubmit={handleSubmit} className="p-4">
                     {error && (
-                        <div className="mb-4 bg-red-50 border border-red-200 text-red-800 rounded-lg p-3 flex items-start gap-2">
-                            <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                            <p className="text-sm">{error}</p>
+                        <div className="mb-3 bg-red-50 border border-red-200 text-red-800 rounded-lg p-2 flex items-start gap-2">
+                            <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs">{error}</p>
                         </div>
                     )}
 
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
-                        <p className="text-sm text-orange-800">
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-2 mb-3">
+                        <p className="text-xs text-orange-800">
                             <strong>ID Indukan:</strong> {livestockCode}
                         </p>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Tanggal Penjualan <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -121,12 +122,12 @@ export function SellLivestockForm({ livestockId, livestockCode, onClose, onSucce
                                 max={new Date().toISOString().split('T')[0]}
                                 value={formData.sale_date}
                                 onChange={(e) => setFormData({ ...formData, sale_date: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-3 py-2.5 bg-white text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Harga Jual (Rp) <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -136,45 +137,45 @@ export function SellLivestockForm({ livestockId, livestockCode, onClose, onSucce
                                 value={formData.sale_price}
                                 onChange={(e) => setFormData({ ...formData, sale_price: e.target.value })}
                                 placeholder="500000"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nama Pembeli</label>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Nama Pembeli</label>
                             <input
                                 type="text"
                                 value={formData.buyer_name}
                                 onChange={(e) => setFormData({ ...formData, buyer_name: e.target.value })}
                                 placeholder="Nama pembeli (opsional)"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Catatan</label>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Catatan</label>
                             <textarea
                                 rows={2}
                                 value={formData.notes}
                                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                                 placeholder="Catatan tambahan..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
                             />
                         </div>
                     </div>
 
-                    <div className="flex gap-3 mt-6">
+                    <div className="flex gap-2 mt-4">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                            className="flex-1 px-3 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                         >
                             Batal
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50"
+                            className="flex-1 px-3 py-2 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50"
                         >
                             {loading ? 'Menyimpan...' : 'Jual Indukan'}
                         </button>

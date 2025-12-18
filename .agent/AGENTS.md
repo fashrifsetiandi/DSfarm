@@ -60,7 +60,7 @@ If Wrong: Explain the logic deeply in Indonesian.
 If Right: Congratulate and proceed.
 
 5. 🛡️ Session Continuity Protocol (THE "DEEP SAVE")
-TRIGGER: /checkpoint OR /deep-save OR Context Full.
+TRIGGER: /checkpoint OR /deep-save OR /save OR /simpan OR Context Full.
 
 INSTRUCTION: Stop coding. Commit pending changes to devlogs. Generate "Context Transfer Report".
 
