@@ -20,9 +20,10 @@
 
 ## 📋 Task Checklist (Traffic Light)
 
-- [ ] **Fix Breed Code Uniqueness**
+- [x] **Fix Breed Code Uniqueness**
   - *Why:* Agar tiap user bisa membuat kode ras yang sama (e.g. "NZW") tanpa konflik
   - [x] Buat SQL script `multi_tenancy_fix_safe.sql`
+  - [x] Update `complete_setup.sql` dengan user-scoped UNIQUE constraints
   - [ ] Jalankan script di Supabase SQL Editor
   - [ ] Verifikasi 2 akun berbeda bisa buat "NZW"
 
@@ -87,3 +88,4 @@ ALTER TABLE settings_feed_types ADD CONSTRAINT unique_feed_code_per_user UNIQUE 
 | Commit | Message |
 |--------|---------|
 | `fe2bb1b` | fix: add safe multi-tenancy SQL fix script for breed codes |
+| `17f1a07` | fix: update complete_setup.sql with user-scoped UNIQUE constraints for multi-tenancy |
