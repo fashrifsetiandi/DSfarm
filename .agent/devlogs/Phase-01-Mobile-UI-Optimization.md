@@ -152,6 +152,49 @@ tailwind.config.js               # Added xs: 375px breakpoint
 | `78c732d` | fix: add scroll lock to modals and improve mobile form styling |
 | `266b5a8` | style: show only offspring ID or breed name, not both |
 | `daac403` | fix: sync batch sell offspring query with age-based status |
+| `2b3d83d` | fix: prevent horizontal scroll on modals (iPhone 12 mini issue) |
+| `09d3ab0` | fix: prevent horizontal scroll on offspring modals (iPhone 12 mini) |
+
+---
+
+## 📅 Session 2: 2025-12-18 (~30 menit)
+
+### 🚦 Status Tracker
+
+| Status | Komponen | Penjelasan Simpel |
+|--------|----------|-------------------|
+| ✅ Done | **Modal Horizontal Scroll** | Fix modal bisa digeser horizontal di iPhone 12 Mini |
+
+---
+
+### 🌉 Bridge Notes (Pelajaran)
+
+#### 4. iOS Elastic Scrolling (Rubber Banding)
+> **🎓 Teori:** iOS Safari memiliki fitur "elastic scrolling" dimana content bisa di-drag melebihi batas scroll. Ini bisa menyebabkan horizontal scroll pada elemen yang seharusnya tidak bisa di-scroll.
+> 
+> **💼 Praktek:** Kita tambahkan `overflow-hidden` pada modal overlay dan `overflow-x-hidden` pada modal content, plus `overscroll-behavior: contain` untuk mencegah elastic scrolling.
+>
+> **🇺🇸 Keyword:** *Overflow Hidden, Overscroll Behavior, Elastic Scrolling*
+
+---
+
+### 🔍 Bugs & Fixes
+
+<details>
+<summary><strong>Klik untuk lihat error yang kita temui</strong></summary>
+
+**Bug 6: Modal Horizontal Scroll on iPhone 12 Mini**
+```
+Modal form bisa digeser horizontal, menyebabkan content terpotong di sisi kiri
+```
+- **Penyebab:** Tidak ada `overflow-hidden` pada modal container, iOS elastic scrolling behavior
+- **Fix:** 
+  - Add `overflow-hidden` to modal overlay
+  - Add `overflow-x-hidden` to modal content
+  - Add global CSS rules with `overscroll-behavior: contain`
+  - Applied to 10 modal components (Indukan + Anakan forms)
+
+</details>
 
 ---
 
