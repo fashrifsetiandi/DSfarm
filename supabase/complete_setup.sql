@@ -42,7 +42,7 @@ CREATE TABLE user_profiles (
 CREATE TABLE settings_breeds (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    breed_code VARCHAR(10) UNIQUE NOT NULL,
+    breed_code VARCHAR(10) NOT NULL,
     breed_name VARCHAR(100) NOT NULL,
     description TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -53,7 +53,7 @@ CREATE TABLE settings_breeds (
 CREATE TABLE settings_finance_categories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    category_code VARCHAR(10) UNIQUE NOT NULL,
+    category_code VARCHAR(10) NOT NULL,
     category_name VARCHAR(100) NOT NULL,
     transaction_type VARCHAR(10) CHECK (transaction_type IN ('income', 'expense')) NOT NULL,
     description TEXT,
@@ -65,7 +65,7 @@ CREATE TABLE settings_finance_categories (
 CREATE TABLE settings_feed_types (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    feed_code VARCHAR(10) UNIQUE NOT NULL,
+    feed_code VARCHAR(10) NOT NULL,
     feed_name VARCHAR(100) NOT NULL,
     unit_of_measure VARCHAR(20) CHECK (unit_of_measure IN ('kg', 'sak', 'karung')) NOT NULL,
     description TEXT,
@@ -77,7 +77,7 @@ CREATE TABLE settings_feed_types (
 CREATE TABLE kandang (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    kandang_code VARCHAR(30) NOT NULL UNIQUE,
+    kandang_code VARCHAR(30) NOT NULL,
     name VARCHAR(100) NOT NULL,
     location VARCHAR(100),
     capacity INTEGER NOT NULL DEFAULT 10,
@@ -91,7 +91,7 @@ CREATE TABLE kandang (
 CREATE TABLE livestock (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    livestock_code VARCHAR(30) NOT NULL UNIQUE,
+    livestock_code VARCHAR(30) NOT NULL,
     breed_id UUID REFERENCES settings_breeds(id) NOT NULL,
     gender VARCHAR(10) CHECK (gender IN ('jantan', 'betina')) NOT NULL,
     birth_date DATE NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE livestock (
 CREATE TABLE births (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    birth_code VARCHAR(30) NOT NULL UNIQUE,
+    birth_code VARCHAR(30) NOT NULL,
     mother_id UUID REFERENCES livestock(id) NOT NULL,
     father_id UUID REFERENCES livestock(id),
     
@@ -148,8 +148,8 @@ CREATE TABLE births (
 CREATE TABLE offspring (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    offspring_code VARCHAR(30) NOT NULL UNIQUE,
-    id_anakan VARCHAR(50) UNIQUE,
+    offspring_code VARCHAR(30) NOT NULL,
+    id_anakan VARCHAR(50),
     birth_id UUID REFERENCES births(id),
     mother_id UUID REFERENCES livestock(id) NOT NULL,
     father_id UUID REFERENCES livestock(id),
@@ -223,7 +223,7 @@ CREATE TABLE offspring_health_records (
 CREATE TABLE financial_transactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    transaction_code VARCHAR(30) NOT NULL UNIQUE,
+    transaction_code VARCHAR(30) NOT NULL,
     transaction_type VARCHAR(10) CHECK (transaction_type IN ('income', 'expense')) NOT NULL,
     category_id UUID REFERENCES settings_finance_categories(id) NOT NULL,
     transaction_date DATE NOT NULL,
@@ -237,7 +237,7 @@ CREATE TABLE financial_transactions (
 CREATE TABLE equipment (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    equipment_code VARCHAR(30) NOT NULL UNIQUE,
+    equipment_code VARCHAR(30) NOT NULL,
     equipment_name VARCHAR(100) NOT NULL,
     purchase_date DATE,
     purchase_price DECIMAL(12,2),
@@ -252,7 +252,7 @@ CREATE TABLE equipment (
 CREATE TABLE feed_purchases (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    purchase_code VARCHAR(30) NOT NULL UNIQUE,
+    purchase_code VARCHAR(30) NOT NULL,
     feed_type_id UUID REFERENCES settings_feed_types(id) NOT NULL,
     purchase_date DATE NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
@@ -268,7 +268,7 @@ CREATE TABLE feed_purchases (
 CREATE TABLE feed_usage (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    usage_code VARCHAR(30) NOT NULL UNIQUE,
+    usage_code VARCHAR(30) NOT NULL,
     feed_type_id UUID REFERENCES settings_feed_types(id) NOT NULL,
     usage_date DATE NOT NULL,
     quantity_used DECIMAL(10,2) NOT NULL,
@@ -774,6 +774,29 @@ CREATE POLICY equipment_policy ON equipment FOR ALL USING (user_id = auth.uid())
 CREATE POLICY feed_purchases_policy ON feed_purchases FOR ALL USING (user_id = auth.uid());
 CREATE POLICY feed_usage_policy ON feed_usage FOR ALL USING (user_id = auth.uid());
 CREATE POLICY push_subscriptions_policy ON push_subscriptions FOR ALL USING (user_id = auth.uid());
+
+-- ============================================
+-- STEP 4.5: USER-SCOPED UNIQUE CONSTRAINTS (Multi-Tenancy)
+-- Each user can have the same codes independently
+-- ============================================
+
+-- Settings tables
+ALTER TABLE settings_breeds ADD CONSTRAINT unique_breed_code_per_user UNIQUE (user_id, breed_code);
+ALTER TABLE settings_finance_categories ADD CONSTRAINT unique_category_code_per_user UNIQUE (user_id, category_code);
+ALTER TABLE settings_feed_types ADD CONSTRAINT unique_feed_code_per_user UNIQUE (user_id, feed_code);
+
+-- Core tables
+ALTER TABLE kandang ADD CONSTRAINT unique_kandang_code_per_user UNIQUE (user_id, kandang_code);
+ALTER TABLE livestock ADD CONSTRAINT unique_livestock_code_per_user UNIQUE (user_id, livestock_code);
+ALTER TABLE births ADD CONSTRAINT unique_birth_code_per_user UNIQUE (user_id, birth_code);
+ALTER TABLE offspring ADD CONSTRAINT unique_offspring_code_per_user UNIQUE (user_id, offspring_code);
+ALTER TABLE offspring ADD CONSTRAINT unique_id_anakan_per_user UNIQUE (user_id, id_anakan);
+
+-- Transaction tables
+ALTER TABLE financial_transactions ADD CONSTRAINT unique_transaction_code_per_user UNIQUE (user_id, transaction_code);
+ALTER TABLE equipment ADD CONSTRAINT unique_equipment_code_per_user UNIQUE (user_id, equipment_code);
+ALTER TABLE feed_purchases ADD CONSTRAINT unique_purchase_code_per_user UNIQUE (user_id, purchase_code);
+ALTER TABLE feed_usage ADD CONSTRAINT unique_usage_code_per_user UNIQUE (user_id, usage_code);
 
 -- ============================================
 -- STEP 5: AUTO-CREATE USER PROFILE ON SIGNUP
