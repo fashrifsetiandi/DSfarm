@@ -233,8 +233,8 @@ export function BatchSellForm({ type, onClose, onSuccess }: Props) {
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 sm:mx-auto max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 sm:mx-auto max-h-[90vh] flex flex-col overflow-x-hidden">
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-orange-500 to-orange-600 rounded-t-xl">
                     <div className="flex items-center gap-3">
@@ -249,7 +249,7 @@ export function BatchSellForm({ type, onClose, onSuccess }: Props) {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
                     {error && (
                         <div className="mb-4 bg-red-50 border border-red-200 text-red-800 rounded-lg p-3 flex items-start gap-2">
                             <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />

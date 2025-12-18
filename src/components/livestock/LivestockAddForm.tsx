@@ -165,8 +165,8 @@ export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; 
         ]
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-xl w-[95%] max-w-2xl max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-hidden" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl w-[95%] max-w-2xl max-h-[90vh] flex flex-col overflow-x-hidden" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b">
                     <h2 className="text-xl font-bold">Tambah Indukan Baru</h2>
@@ -176,7 +176,7 @@ export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; 
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto overflow-x-hidden">
                     <div className="p-6 space-y-6">
                         {error && (
                             <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-3 flex items-start gap-2">

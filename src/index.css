@@ -44,6 +44,20 @@ body {
   display: none;
 }
 
+/* Fix modal horizontal overflow on mobile devices */
+/* Modal overlay - prevent any overflow */
+.fixed.inset-0.z-50 {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* Modal content container - prevent horizontal scroll */
+.fixed.inset-0.z-50>div {
+  overflow-x: hidden;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+}
+
 /* Smaller font for very small screens (< 375px) */
 @media (max-width: 374px) {
   html {
