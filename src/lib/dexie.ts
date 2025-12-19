@@ -90,6 +90,25 @@ export async function getPendingSyncCount(): Promise<number> {
 }
 
 /**
+ * Get pending inserts for a specific table (for optimistic UI)
+ */
+export async function getPendingInsertsByTable(table: string): Promise<Record<string, unknown>[]> {
+    const items = await db.syncQueue
+        .where('table')
+        .equals(table)
+        .filter(item => item.operation === 'insert')
+        .toArray()
+
+    return items.map((item, index) => ({
+        ...item.payload,
+        // Add temporary ID and pending flag
+        id: `pending_${item.id || index}`,
+        _isPending: true,
+        _pendingId: item.id
+    }))
+}
+
+/**
  * Remove item from queue after successful sync
  */
 export async function removeFromQueue(id: number): Promise<void> {

@@ -53,8 +53,8 @@ export function OfflinePrepareButton({
                 onClick={handlePrefetch}
                 disabled={isPrefetching || !isOnline}
                 className={`p-2 rounded-lg transition-colors ${isReady
-                        ? 'bg-green-50 text-green-600'
-                        : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
+                    ? 'bg-green-50 text-green-600'
+                    : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
                     } disabled:opacity-50`}
                 title={isReady ? 'Data offline siap' : 'Siapkan mode offline'}
             >
@@ -76,8 +76,8 @@ export function OfflinePrepareButton({
                 onClick={handlePrefetch}
                 disabled={isPrefetching || !isOnline}
                 className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${isReady
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-primary-600 text-white hover:bg-primary-700'
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-primary-600 text-white hover:bg-primary-700'
                     } disabled:opacity-50`}
             >
                 {isPrefetching ? (
@@ -139,46 +139,37 @@ export function OfflinePrepareButton({
 }
 
 /**
- * Small floating button for quick access
+ * Auto-prefetch component - runs silently in background after mount
+ * No UI shown - just triggers prefetch when online and data not cached
  */
 export function OfflinePrepareFloating() {
     const { prefetchAll, isPrefetching, isOnline } = useOfflinePrefetch()
-    const [isReady, setIsReady] = useState<boolean | null>(null)
+    const [hasAttempted, setHasAttempted] = useState(false)
 
     useEffect(() => {
-        const check = async () => {
+        // Only attempt once per session and when online
+        if (hasAttempted || !isOnline || isPrefetching) return
+
+        const autoPrefetch = async () => {
             try {
                 const result = await checkOfflineReadiness()
-                setIsReady(result.isReady)
-            } catch {
-                setIsReady(false)
+                // Only prefetch if data is missing
+                if (!result.isReady) {
+                    console.log('[AutoPrefetch] Starting background prefetch...')
+                    await prefetchAll()
+                    console.log('[AutoPrefetch] Complete!')
+                }
+            } catch (err) {
+                console.warn('[AutoPrefetch] Failed:', err)
             }
+            setHasAttempted(true)
         }
-        check()
-    }, [])
 
-    // Don't show if already ready
-    if (isReady) return null
+        // Delay to not block initial render
+        const timer = setTimeout(autoPrefetch, 3000)
+        return () => clearTimeout(timer)
+    }, [isOnline, isPrefetching, hasAttempted, prefetchAll])
 
-    return (
-        <button
-            onClick={prefetchAll}
-            disabled={isPrefetching || !isOnline}
-            className="fixed bottom-20 left-4 z-50 flex items-center gap-2 px-4 py-2 
-                bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700
-                disabled:opacity-50 transition-all"
-        >
-            {isPrefetching ? (
-                <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm">Mengunduh...</span>
-                </>
-            ) : (
-                <>
-                    <Download className="h-4 w-4" />
-                    <span className="text-sm">Siapkan Offline</span>
-                </>
-            )}
-        </button>
-    )
+    // No UI - just background process
+    return null
 }
