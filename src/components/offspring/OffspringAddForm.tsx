@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
 import { useLivestockList, useKandangList } from '@/hooks/useQueries'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface OffspringFormData {
     mother_id: string
@@ -17,6 +18,7 @@ interface OffspringFormData {
 
 export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
+    const isOnline = useIsOnline()
 
     // Use offline-aware hooks for dropdown data
     const { data: livestockData = [] } = useLivestockList()
@@ -68,7 +70,23 @@ export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; 
                 user_id: user?.id,
             }
 
-            // Insert offspring and get the new ID
+            // Check if online
+            if (!isOnline) {
+                // Offline: Queue to IndexedDB for later sync
+                const { addToQueue } = await import('@/lib/dexie')
+                await addToQueue('offspring', 'insert', payload)
+
+                // Show toast and close form
+                const { toast } = await import('sonner')
+                toast.info('📥 Data disimpan offline', {
+                    description: 'Akan sync otomatis saat koneksi tersedia'
+                })
+                onSuccess()
+                onClose()
+                return
+            }
+
+            // Online: Insert offspring and get the new ID
             // @ts-ignore - Supabase types limitation
             const { data: insertedData, error: insertError } = await supabase
                 .from('offspring')

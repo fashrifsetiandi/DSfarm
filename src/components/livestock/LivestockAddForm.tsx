@@ -72,7 +72,23 @@ export function LivestockAddForm({ onClose, onSuccess }: { onClose: () => void; 
                 user_id: user?.id,
             }
 
-            // Insert livestock and get the new ID
+            // Check if online
+            if (!isOnline) {
+                // Offline: Queue to IndexedDB for later sync
+                const { addToQueue } = await import('@/lib/dexie')
+                await addToQueue('livestock', 'insert', payload)
+
+                // Show toast and close form
+                const { toast } = await import('sonner')
+                toast.info('📥 Data disimpan offline', {
+                    description: 'Akan sync otomatis saat koneksi tersedia'
+                })
+                onSuccess()
+                onClose()
+                return
+            }
+
+            // Online: Insert directly to Supabase
             // @ts-ignore - Supabase types limitation
             const { data: insertedData, error: insertError } = await supabase
                 .from('livestock')
