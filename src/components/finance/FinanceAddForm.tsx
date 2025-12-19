@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
-import { useFinanceCategories } from '@/hooks/useSettings'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface TransactionFormData {
     transaction_type: 'income' | 'expense'
@@ -13,18 +11,16 @@ interface TransactionFormData {
     description: string
 }
 
+interface FinanceCategory {
+    id: string
+    category_code: string
+    category_name: string
+    transaction_type: 'income' | 'expense'
+}
+
 export function FinanceAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
-    const isOnline = useIsOnline()
-
-    // Use offline-aware hook for categories
-    const { data: allCategories = [] } = useFinanceCategories()
-    // Map to expected format
-    const categories = allCategories.map(cat => ({
-        ...cat,
-        transaction_type: cat.category_type
-    }))
-
+    const [categories, setCategories] = useState<FinanceCategory[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState<TransactionFormData>({
@@ -36,9 +32,21 @@ export function FinanceAddForm({ onClose, onSuccess }: { onClose: () => void; on
     })
 
     useEffect(() => {
+        fetchCategories()
+    }, [])
+
+    useEffect(() => {
         // Reset category when type changes
         setFormData((prev) => ({ ...prev, category_id: '' }))
     }, [formData.transaction_type])
+
+    const fetchCategories = async () => {
+        const { data } = await supabase
+            .from('settings_finance_categories')
+            .select('*')
+            .order('category_name')
+        setCategories((data || []) as FinanceCategory[])
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -53,20 +61,6 @@ export function FinanceAddForm({ onClose, onSuccess }: { onClose: () => void; on
                 amount: parseFloat(formData.amount),
                 description: formData.description || null,
                 user_id: user?.id,
-            }
-
-            // Check if online
-            if (!isOnline) {
-                const { addToQueue } = await import('@/lib/dexie')
-                await addToQueue('financial_transactions', 'insert', payload)
-
-                const { toast } = await import('sonner')
-                toast.info('📥 Transaksi disimpan offline', {
-                    description: 'Akan sync saat koneksi tersedia'
-                })
-                onSuccess()
-                onClose()
-                return
             }
 
             const { error } = await supabase.from('financial_transactions').insert(payload as any)

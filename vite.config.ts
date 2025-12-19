@@ -33,11 +33,6 @@ export default defineConfig({
         ]
       },
       workbox: {
-        // Pre-cache all JS, CSS, and HTML for offline app shell
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
-        // SPA navigation fallback
-        navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
@@ -45,13 +40,12 @@ export default defineConfig({
             options: {
               cacheName: 'supabase-cache',
               expiration: {
-                maxEntries: 100,
+                maxEntries: 50,
                 maxAgeSeconds: 60 * 60 * 24 // 24 hours
               },
               cacheableResponse: {
                 statuses: [0, 200]
-              },
-              networkTimeoutSeconds: 10
+              }
             }
           }
         ]

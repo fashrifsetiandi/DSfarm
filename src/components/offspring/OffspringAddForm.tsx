@@ -1,9 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
-import { useLivestockList, useKandangList } from '@/hooks/useQueries'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface OffspringFormData {
     mother_id: string
@@ -16,21 +14,22 @@ interface OffspringFormData {
     notes: string
 }
 
+interface Livestock {
+    id: string
+    id_indukan: string
+    gender: string
+}
+
+interface Kandang {
+    id: string
+    kandang_code: string
+    name: string
+}
+
 export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
-    const isOnline = useIsOnline()
-
-    // Use offline-aware hooks for dropdown data
-    const { data: livestockData = [] } = useLivestockList()
-    const { data: kandangs = [] } = useKandangList()
-
-    // Extract livestock list with proper types
-    const livestock = livestockData.map((l: any) => ({
-        id: l.id,
-        id_indukan: l.id_indukan,
-        gender: l.gender
-    }))
-
+    const [livestock, setLivestock] = useState<Livestock[]>([])
+    const [kandangs, setKandangs] = useState<Kandang[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState<OffspringFormData>({
@@ -43,6 +42,25 @@ export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; 
         health_status: 'sehat',
         notes: '',
     })
+
+    useEffect(() => {
+        fetchLivestock()
+        fetchKandangs()
+    }, [])
+
+    const fetchLivestock = async () => {
+        const { data } = await supabase
+            .from('livestock')
+            .select('id, id_indukan, gender')
+            .eq('status', 'aktif')
+            .order('id_indukan')
+        setLivestock(data || [])
+    }
+
+    const fetchKandangs = async () => {
+        const { data } = await supabase.from('kandang').select('*').order('kandang_code')
+        setKandangs(data || [])
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -70,23 +88,7 @@ export function OffspringAddForm({ onClose, onSuccess }: { onClose: () => void; 
                 user_id: user?.id,
             }
 
-            // Check if online
-            if (!isOnline) {
-                // Offline: Queue to IndexedDB for later sync
-                const { addToQueue } = await import('@/lib/dexie')
-                await addToQueue('offspring', 'insert', payload)
-
-                // Show toast and close form
-                const { toast } = await import('sonner')
-                toast.info('📥 Data disimpan offline', {
-                    description: 'Akan sync otomatis saat koneksi tersedia'
-                })
-                onSuccess()
-                onClose()
-                return
-            }
-
-            // Online: Insert offspring and get the new ID
+            // Insert offspring and get the new ID
             // @ts-ignore - Supabase types limitation
             const { data: insertedData, error: insertError } = await supabase
                 .from('offspring')

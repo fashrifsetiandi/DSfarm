@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X } from 'lucide-react'
-import { useFeedTypes } from '@/hooks/useSettings'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
+
+interface FeedType {
+    id: string
+    feed_name: string
+    unit_of_measure: string
+}
 
 interface FeedPurchaseAddFormProps {
     onClose: () => void
@@ -23,18 +27,9 @@ interface FeedPurchaseAddFormProps {
 
 export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurchaseAddFormProps) {
     const { user } = useAuth()
-    const isOnline = useIsOnline()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
-
-    // Use offline-aware hook for feed types
-    const { data: feedTypesData = [] } = useFeedTypes()
-    // Map to expected format
-    const feedTypes = feedTypesData.map(ft => ({
-        id: ft.id,
-        feed_name: ft.feed_name,
-        unit_of_measure: ft.unit
-    }))
+    const [feedTypes, setFeedTypes] = useState<FeedType[]>([])
 
     const [formData, setFormData] = useState({
         purchase_code: editData?.purchase_code || '',
@@ -53,6 +48,18 @@ export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurcha
             setFormData(prev => ({ ...prev, purchase_code: `FP-${timestamp}` }))
         }
     }, [editData])
+
+    // Fetch feed types
+    useEffect(() => {
+        const fetchFeedTypes = async () => {
+            const { data } = await supabase
+                .from('settings_feed_types')
+                .select('id, feed_name, unit_of_measure')
+                .order('feed_name')
+            if (data) setFeedTypes(data)
+        }
+        fetchFeedTypes()
+    }, [])
 
     // Calculate total price
     const totalPrice = parseFloat(formData.quantity || '0') * parseFloat(formData.unit_price || '0')
@@ -80,29 +87,12 @@ export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurcha
             }
 
             if (editData) {
-                // UPDATE - must be online
-                if (!isOnline) {
-                    setError('Edit data hanya bisa dilakukan saat online')
-                    setLoading(false)
-                    return
-                }
                 const { error: updateError } = await supabase
                     .from('feed_purchases')
                     .update(data)
                     .eq('id', editData.id)
                 if (updateError) throw updateError
             } else {
-                // INSERT - support offline
-                if (!isOnline) {
-                    const { addToQueue } = await import('@/lib/dexie')
-                    await addToQueue('feed_purchases', 'insert', data)
-
-                    const { toast } = await import('sonner')
-                    toast.info('📥 Pembelian pakan disimpan offline')
-                    onSuccess()
-                    return
-                }
-
                 const { error: insertError } = await supabase
                     .from('feed_purchases')
                     .insert(data)

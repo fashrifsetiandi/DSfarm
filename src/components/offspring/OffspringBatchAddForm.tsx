@@ -2,13 +2,23 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
-import { useLivestockList, useKandangList } from '@/hooks/useQueries'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface BatchOffspring {
     id: string
     gender: 'jantan' | 'betina' | ''
     weight_kg: string
+}
+
+interface Livestock {
+    id: string
+    id_indukan: string
+    gender: string
+}
+
+interface Kandang {
+    id: string
+    kandang_code: string
+    name: string
 }
 
 interface OffspringBatchAddFormProps {
@@ -31,19 +41,8 @@ export function OffspringBatchAddForm({
     onSuccess
 }: OffspringBatchAddFormProps) {
     const { user } = useAuth()
-    const isOnline = useIsOnline()
-
-    // Use offline-aware hooks for dropdown data
-    const { data: livestockData = [] } = useLivestockList()
-    const { data: _kandangs = [] } = useKandangList()
-
-    // Extract livestock list
-    const livestock = livestockData.map((l: any) => ({
-        id: l.id,
-        id_indukan: l.id_indukan,
-        gender: l.gender
-    }))
-
+    const [livestock, setLivestock] = useState<Livestock[]>([])
+    const [_kandangs, setKandangs] = useState<Kandang[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -60,10 +59,15 @@ export function OffspringBatchAddForm({
     const [offspringList, setOffspringList] = useState<BatchOffspring[]>(
         Array.from({ length: initialQuantity || 3 }, (_, i) => ({
             id: String(i + 1),
-            gender: '' as const,
+            gender: '',
             weight_kg: '',
         }))
     )
+
+    useEffect(() => {
+        fetchLivestock()
+        fetchKandangs()
+    }, [])
 
     // Update list when quantity changes
     useEffect(() => {
@@ -81,6 +85,20 @@ export function OffspringBatchAddForm({
             setOffspringList(offspringList.slice(0, quantity))
         }
     }, [quantity])
+
+    const fetchLivestock = async () => {
+        const { data } = await supabase
+            .from('livestock')
+            .select('id, id_indukan, gender')
+            .eq('status', 'aktif')
+            .order('id_indukan')
+        setLivestock(data || [])
+    }
+
+    const fetchKandangs = async () => {
+        const { data } = await supabase.from('kandang').select('*').order('kandang_code')
+        setKandangs(data || [])
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -107,23 +125,6 @@ export function OffspringBatchAddForm({
                 status_notes: null,
                 user_id: user?.id,
             }))
-
-            // Check if online
-            if (!isOnline) {
-                const { addToQueue } = await import('@/lib/dexie')
-                // Queue each offspring separately
-                for (const record of records) {
-                    await addToQueue('offspring', 'insert', record)
-                }
-
-                const { toast } = await import('sonner')
-                toast.info('📥 Anakan disimpan offline', {
-                    description: `${records.length} anakan akan sync saat koneksi tersedia`
-                })
-                onSuccess()
-                onClose()
-                return
-            }
 
             // Insert offspring and get IDs back
             const { data: insertedData, error } = await supabase

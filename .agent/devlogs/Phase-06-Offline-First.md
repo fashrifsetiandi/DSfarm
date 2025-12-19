@@ -41,11 +41,9 @@
   - [x] Add SyncStatusIndicator to Navbar
   - [x] Initialize sync on app load
 
-- [x] **Offline Read Cache**
-  - [x] Create `useOfflineQuery` hook wrapper
-  - [x] Create `useSettings` hooks (breeds, feeds, categories)
-  - [x] Update `useQueries` for kandang, livestock, offspring
-  - [x] Update `LivestockAddForm` to use offline hooks
+- [ ] **Form Refactoring** (Future Phase)
+  - [ ] Refactor simple forms to use useMutation
+  - [ ] Handle complex chained inserts
 
 ---
 

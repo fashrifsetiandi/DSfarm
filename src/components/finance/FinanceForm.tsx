@@ -15,8 +15,6 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
-import { useFinanceCategories } from '@/hooks/useSettings'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 // ======================================================
 // INTERFACES
@@ -32,6 +30,13 @@ interface TransactionData {
     description: string | null
 }
 
+interface Category {
+    id: string
+    category_code: string
+    category_name: string
+    transaction_type: 'income' | 'expense'
+}
+
 interface Props {
     transaction?: TransactionData | null  // Jika ada = edit mode
     onClose: () => void
@@ -45,16 +50,9 @@ interface Props {
 export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
     const { user } = useAuth()
     const isEditMode = !!transaction
-    const isOnline = useIsOnline()
 
-    // Use offline-aware hook for categories
-    const { data: allCategories = [] } = useFinanceCategories()
-    // Map to expected format
-    const categories = allCategories.map(cat => ({
-        ...cat,
-        transaction_type: cat.category_type
-    }))
-
+    // Form state
+    const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -67,12 +65,25 @@ export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
         description: transaction?.description || '',
     })
 
+    // Fetch categories saat mount
+    useEffect(() => {
+        fetchCategories()
+    }, [])
+
     // Reset category saat type berubah (hanya di mode tambah)
     useEffect(() => {
         if (!isEditMode) {
             setFormData(prev => ({ ...prev, category_id: '' }))
         }
     }, [formData.transaction_type, isEditMode])
+
+    const fetchCategories = async () => {
+        const { data } = await supabase
+            .from('settings_finance_categories')
+            .select('*')
+            .order('category_name')
+        setCategories((data || []) as Category[])
+    }
 
     // Handle form submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -91,29 +102,14 @@ export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
             }
 
             if (isEditMode && transaction?.id) {
-                // UPDATE - edit existing (must be online)
-                if (!isOnline) {
-                    setError('Edit data hanya bisa dilakukan saat online')
-                    setLoading(false)
-                    return
-                }
+                // UPDATE - edit existing
                 const { error } = await supabase
                     .from('financial_transactions')
                     .update(payload as any)
                     .eq('id', transaction.id)
                 if (error) throw error
             } else {
-                // INSERT - tambah baru (support offline)
-                if (!isOnline) {
-                    const { addToQueue } = await import('@/lib/dexie')
-                    await addToQueue('financial_transactions', 'insert', payload)
-
-                    const { toast } = await import('sonner')
-                    toast.info('📥 Transaksi disimpan offline')
-                    onSuccess()
-                    return
-                }
-
+                // INSERT - tambah baru
                 const { error } = await supabase
                     .from('financial_transactions')
                     .insert(payload as any)
@@ -174,8 +170,8 @@ export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, transaction_type: 'income' })}
                                     className={`px-4 py-3 rounded-lg border-2 font-medium transition-colors ${formData.transaction_type === 'income'
-                                        ? 'border-green-600 bg-green-50 text-green-700'
-                                        : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                                            ? 'border-green-600 bg-green-50 text-green-700'
+                                            : 'border-gray-200 hover:border-gray-300 text-gray-600'
                                         }`}
                                 >
                                     💰 Pemasukan
@@ -184,8 +180,8 @@ export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, transaction_type: 'expense' })}
                                     className={`px-4 py-3 rounded-lg border-2 font-medium transition-colors ${formData.transaction_type === 'expense'
-                                        ? 'border-red-600 bg-red-50 text-red-700'
-                                        : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                                            ? 'border-red-600 bg-red-50 text-red-700'
+                                            : 'border-gray-200 hover:border-gray-300 text-gray-600'
                                         }`}
                                 >
                                     💸 Pengeluaran

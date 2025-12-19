@@ -6,12 +6,10 @@
  * - Deduplication (multiple components = 1 request)
  * - Background refetch
  * - Optimistic updates
- * - OFFLINE SUPPORT via IndexedDB cache
  */
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { useOfflineQuery, useOfflineMasterData } from './useOfflineQuery'
 
 // ============================================
 // QUERY KEYS (for cache management)
@@ -33,7 +31,7 @@ export const queryKeys = {
 }
 
 // ============================================
-// KANDANG QUERIES (with offline support)
+// KANDANG QUERIES
 // ============================================
 
 interface Kandang {
@@ -48,7 +46,7 @@ interface Kandang {
 }
 
 export function useKandangList() {
-    return useOfflineQuery({
+    return useQuery({
         queryKey: queryKeys.kandangList,
         queryFn: async () => {
             const { data, error } = await supabase
@@ -59,12 +57,11 @@ export function useKandangList() {
             if (error) throw error
             return (data as Kandang[]) || []
         },
-        cacheKey: 'kandang_list',
     })
 }
 
 export function useKandangPage() {
-    return useOfflineQuery({
+    return useQuery({
         queryKey: queryKeys.kandangPage,
         queryFn: async () => {
             const { data, error } = await supabase
@@ -75,16 +72,15 @@ export function useKandangPage() {
             if (error) throw error
             return (data as Kandang[]) || []
         },
-        cacheKey: 'kandang_page',
     })
 }
 
 // ============================================
-// LIVESTOCK QUERIES (with offline support)
+// LIVESTOCK QUERIES
 // ============================================
 
 export function useLivestockList() {
-    return useOfflineQuery({
+    return useQuery({
         queryKey: queryKeys.livestockList,
         queryFn: async () => {
             // Fetch livestock with relations
@@ -128,7 +124,6 @@ export function useLivestockList() {
 
             return livestockWithWeight
         },
-        cacheKey: 'livestock_list',
     })
 }
 
@@ -167,7 +162,7 @@ export function useLivestockHealthRecords(livestockId: string) {
 }
 
 // ============================================
-// OFFSPRING QUERIES (with offline support)
+// OFFSPRING QUERIES
 // ============================================
 
 // Status calculation helper
@@ -189,7 +184,7 @@ const getStatusByAge = (birthDate: string): string => {
 }
 
 export function useOffspringList() {
-    return useOfflineQuery({
+    return useQuery({
         queryKey: queryKeys.offspringList,
         queryFn: async () => {
             // Fetch offspring data
@@ -232,7 +227,6 @@ export function useOffspringList() {
 
             return processedData
         },
-        cacheKey: 'offspring_list',
     })
 }
 

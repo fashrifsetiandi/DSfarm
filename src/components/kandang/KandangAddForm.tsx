@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
-import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface KandangFormData {
     block: string
@@ -14,7 +13,6 @@ interface KandangFormData {
 
 export function KandangAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
-    const isOnline = useIsOnline()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState<KandangFormData>({
@@ -41,37 +39,7 @@ export function KandangAddForm({ onClose, onSuccess }: { onClose: () => void; on
             const capacity = parseInt(formData.capacity)
             const block = formData.block.trim().toUpperCase()
 
-            // Check if online
-            if (!isOnline) {
-                // Offline: Queue with temporary codes
-                const { addToQueue } = await import('@/lib/dexie')
-                const timestamp = Date.now()
-
-                for (let i = 0; i < quantity; i++) {
-                    const tempCode = `${block}-TMP${timestamp + i}`
-                    await addToQueue('kandang', 'insert', {
-                        kandang_code: tempCode,
-                        name: `Kandang ${block}-${String(i + 1).padStart(2, '0')}`,
-                        location: formData.location || null,
-                        capacity: capacity,
-                        description: formData.description || null,
-                        user_id: user?.id,
-                        _needsCodeGeneration: true, // Flag for sync to regenerate code
-                        _block: block,
-                    })
-                }
-
-                // Show toast and close form
-                const { toast } = await import('sonner')
-                toast.info('📥 Data disimpan offline', {
-                    description: `${quantity} kandang akan sync saat koneksi tersedia`
-                })
-                onSuccess()
-                onClose()
-                return
-            }
-
-            // Online: Fetch existing kandang codes with same block prefix to find the last number
+            // Fetch existing kandang codes with same block prefix to find the last number
             const { data: existingKandangs } = await supabase
                 .from('kandang')
                 .select('kandang_code')
