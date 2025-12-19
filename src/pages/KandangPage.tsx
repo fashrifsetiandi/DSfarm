@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase'
 import { Plus, Search, Trash2, Home, X, Rabbit } from 'lucide-react'
 import { KandangAddForm } from '@/components/kandang/KandangAddForm'
 import { useKandangPage, useInvalidateKandang } from '@/hooks/useQueries'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
+import { toast } from 'sonner'
 
 interface Kandang {
     id: string
@@ -41,6 +43,7 @@ const DEFAULT_COLOR = { bg: 'bg-gray-50', border: 'border-gray-200', text: 'text
 export function KandangPage() {
     const { data: kandangs = [], isLoading: loading } = useKandangPage()
     const invalidateKandang = useInvalidateKandang()
+    const isOnline = useIsOnline()
     const [showAddForm, setShowAddForm] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
     const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; code: string } | null>(null)
@@ -54,12 +57,22 @@ export function KandangPage() {
     const confirmDelete = async () => {
         if (!deleteConfirm) return
 
+        // Check if online - delete requires online connection
+        if (!isOnline) {
+            toast.error('Hapus data hanya bisa dilakukan saat online', {
+                description: 'Sambungkan koneksi internet terlebih dahulu'
+            })
+            setDeleteConfirm(null)
+            return
+        }
+
         try {
             const { error } = await supabase.from('kandang').delete().eq('id', deleteConfirm.id)
             if (error) throw error
             invalidateKandang()
+            toast.success('Kandang berhasil dihapus')
         } catch (err: any) {
-            alert('Error: ' + err.message)
+            toast.error('Gagal menghapus: ' + err.message)
         } finally {
             setDeleteConfirm(null)
         }
