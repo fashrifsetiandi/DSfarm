@@ -5,6 +5,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Navbar } from './components/layout/Navbar'
 import { Toaster } from 'sonner'
 import { OfflineBanner } from './components/shared/SyncStatusIndicator'
+import { OfflinePrepareFloating } from './components/shared/OfflinePrepareButton'
 import { initializeSync } from './lib/offlineSync'
 import { useEffect } from 'react'
 
@@ -98,6 +99,9 @@ function App() {
             richColors
             closeButton
           />
+
+          {/* Floating offline prepare button */}
+          <OfflinePrepareFloating />
 
           {/* Suspense menangkap loading state dari lazy components */}
           {/* fallback = apa yang ditampilkan saat loading */}
