@@ -3,6 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './contexts/AuthContext'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 import { Navbar } from './components/layout/Navbar'
+import { Toaster } from 'sonner'
+import { OfflineBanner } from './components/shared/SyncStatusIndicator'
+import { initializeSync } from './lib/offlineSync'
+import { useEffect } from 'react'
 
 // ============================================
 // LAZY LOADING - PENJELASAN
@@ -76,10 +80,25 @@ const queryClient = new QueryClient({
 })
 
 function App() {
+  // Initialize offline sync on app load
+  useEffect(() => {
+    initializeSync()
+  }, [])
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
+          {/* Offline Banner - shows when offline */}
+          <OfflineBanner />
+
+          {/* Toast notifications */}
+          <Toaster
+            position="top-center"
+            richColors
+            closeButton
+          />
+
           {/* Suspense menangkap loading state dari lazy components */}
           {/* fallback = apa yang ditampilkan saat loading */}
           <Suspense fallback={<PageLoader />}>

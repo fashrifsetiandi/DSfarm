@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { SyncStatusIndicator } from '@/components/shared/SyncStatusIndicator'
 import {
     Menu,
     X,
@@ -73,6 +74,7 @@ export function Navbar() {
 
                     {/* User Menu */}
                     <div className="hidden md:flex items-center gap-3">
+                        <SyncStatusIndicator compact />
                         <span className="text-sm text-gray-600">{user.email}</span>
                         <button
                             onClick={handleSignOut}
