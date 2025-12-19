@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X } from 'lucide-react'
 import { useFeedTypes } from '@/hooks/useSettings'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface FeedPurchaseAddFormProps {
     onClose: () => void
@@ -22,6 +23,7 @@ interface FeedPurchaseAddFormProps {
 
 export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurchaseAddFormProps) {
     const { user } = useAuth()
+    const isOnline = useIsOnline()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -78,12 +80,29 @@ export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurcha
             }
 
             if (editData) {
+                // UPDATE - must be online
+                if (!isOnline) {
+                    setError('Edit data hanya bisa dilakukan saat online')
+                    setLoading(false)
+                    return
+                }
                 const { error: updateError } = await supabase
                     .from('feed_purchases')
                     .update(data)
                     .eq('id', editData.id)
                 if (updateError) throw updateError
             } else {
+                // INSERT - support offline
+                if (!isOnline) {
+                    const { addToQueue } = await import('@/lib/dexie')
+                    await addToQueue('feed_purchases', 'insert', data)
+
+                    const { toast } = await import('sonner')
+                    toast.info('📥 Pembelian pakan disimpan offline')
+                    onSuccess()
+                    return
+                }
+
                 const { error: insertError } = await supabase
                     .from('feed_purchases')
                     .insert(data)

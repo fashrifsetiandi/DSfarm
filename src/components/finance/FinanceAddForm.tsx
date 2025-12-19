@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
 import { useFinanceCategories } from '@/hooks/useSettings'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface TransactionFormData {
     transaction_type: 'income' | 'expense'
@@ -14,6 +15,7 @@ interface TransactionFormData {
 
 export function FinanceAddForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const { user } = useAuth()
+    const isOnline = useIsOnline()
 
     // Use offline-aware hook for categories
     const { data: allCategories = [] } = useFinanceCategories()
@@ -51,6 +53,20 @@ export function FinanceAddForm({ onClose, onSuccess }: { onClose: () => void; on
                 amount: parseFloat(formData.amount),
                 description: formData.description || null,
                 user_id: user?.id,
+            }
+
+            // Check if online
+            if (!isOnline) {
+                const { addToQueue } = await import('@/lib/dexie')
+                await addToQueue('financial_transactions', 'insert', payload)
+
+                const { toast } = await import('sonner')
+                toast.info('📥 Transaksi disimpan offline', {
+                    description: 'Akan sync saat koneksi tersedia'
+                })
+                onSuccess()
+                onClose()
+                return
             }
 
             const { error } = await supabase.from('financial_transactions').insert(payload as any)

@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
 import { useLivestockList, useKandangList } from '@/hooks/useQueries'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 interface BatchOffspring {
     id: string
@@ -30,6 +31,7 @@ export function OffspringBatchAddForm({
     onSuccess
 }: OffspringBatchAddFormProps) {
     const { user } = useAuth()
+    const isOnline = useIsOnline()
 
     // Use offline-aware hooks for dropdown data
     const { data: livestockData = [] } = useLivestockList()
@@ -58,7 +60,7 @@ export function OffspringBatchAddForm({
     const [offspringList, setOffspringList] = useState<BatchOffspring[]>(
         Array.from({ length: initialQuantity || 3 }, (_, i) => ({
             id: String(i + 1),
-            gender: '',
+            gender: '' as const,
             weight_kg: '',
         }))
     )
@@ -105,6 +107,23 @@ export function OffspringBatchAddForm({
                 status_notes: null,
                 user_id: user?.id,
             }))
+
+            // Check if online
+            if (!isOnline) {
+                const { addToQueue } = await import('@/lib/dexie')
+                // Queue each offspring separately
+                for (const record of records) {
+                    await addToQueue('offspring', 'insert', record)
+                }
+
+                const { toast } = await import('sonner')
+                toast.info('📥 Anakan disimpan offline', {
+                    description: `${records.length} anakan akan sync saat koneksi tersedia`
+                })
+                onSuccess()
+                onClose()
+                return
+            }
 
             // Insert offspring and get IDs back
             const { data: insertedData, error } = await supabase

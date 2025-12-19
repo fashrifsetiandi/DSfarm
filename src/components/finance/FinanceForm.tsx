@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
 import { useFinanceCategories } from '@/hooks/useSettings'
+import { useIsOnline } from '@/hooks/useOnlineStatus'
 
 // ======================================================
 // INTERFACES
@@ -44,6 +45,7 @@ interface Props {
 export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
     const { user } = useAuth()
     const isEditMode = !!transaction
+    const isOnline = useIsOnline()
 
     // Use offline-aware hook for categories
     const { data: allCategories = [] } = useFinanceCategories()
@@ -89,14 +91,29 @@ export function FinanceForm({ transaction, onClose, onSuccess }: Props) {
             }
 
             if (isEditMode && transaction?.id) {
-                // UPDATE - edit existing
+                // UPDATE - edit existing (must be online)
+                if (!isOnline) {
+                    setError('Edit data hanya bisa dilakukan saat online')
+                    setLoading(false)
+                    return
+                }
                 const { error } = await supabase
                     .from('financial_transactions')
                     .update(payload as any)
                     .eq('id', transaction.id)
                 if (error) throw error
             } else {
-                // INSERT - tambah baru
+                // INSERT - tambah baru (support offline)
+                if (!isOnline) {
+                    const { addToQueue } = await import('@/lib/dexie')
+                    await addToQueue('financial_transactions', 'insert', payload)
+
+                    const { toast } = await import('sonner')
+                    toast.info('📥 Transaksi disimpan offline')
+                    onSuccess()
+                    return
+                }
+
                 const { error } = await supabase
                     .from('financial_transactions')
                     .insert(payload as any)
