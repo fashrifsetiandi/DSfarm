@@ -2,12 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X } from 'lucide-react'
-
-interface FeedType {
-    id: string
-    feed_name: string
-    unit_of_measure: string
-}
+import { useFeedTypes } from '@/hooks/useSettings'
 
 interface FeedPurchaseAddFormProps {
     onClose: () => void
@@ -29,7 +24,15 @@ export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurcha
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
-    const [feedTypes, setFeedTypes] = useState<FeedType[]>([])
+
+    // Use offline-aware hook for feed types
+    const { data: feedTypesData = [] } = useFeedTypes()
+    // Map to expected format
+    const feedTypes = feedTypesData.map(ft => ({
+        id: ft.id,
+        feed_name: ft.feed_name,
+        unit_of_measure: ft.unit
+    }))
 
     const [formData, setFormData] = useState({
         purchase_code: editData?.purchase_code || '',
@@ -48,18 +51,6 @@ export function FeedPurchaseAddForm({ onClose, onSuccess, editData }: FeedPurcha
             setFormData(prev => ({ ...prev, purchase_code: `FP-${timestamp}` }))
         }
     }, [editData])
-
-    // Fetch feed types
-    useEffect(() => {
-        const fetchFeedTypes = async () => {
-            const { data } = await supabase
-                .from('settings_feed_types')
-                .select('id, feed_name, unit_of_measure')
-                .order('feed_name')
-            if (data) setFeedTypes(data)
-        }
-        fetchFeedTypes()
-    }, [])
 
     // Calculate total price
     const totalPrice = parseFloat(formData.quantity || '0') * parseFloat(formData.unit_price || '0')

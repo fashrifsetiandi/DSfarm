@@ -2,23 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { X, AlertCircle } from 'lucide-react'
+import { useLivestockList, useKandangList } from '@/hooks/useQueries'
 
 interface BatchOffspring {
     id: string
     gender: 'jantan' | 'betina' | ''
     weight_kg: string
-}
-
-interface Livestock {
-    id: string
-    id_indukan: string
-    gender: string
-}
-
-interface Kandang {
-    id: string
-    kandang_code: string
-    name: string
 }
 
 interface OffspringBatchAddFormProps {
@@ -41,8 +30,18 @@ export function OffspringBatchAddForm({
     onSuccess
 }: OffspringBatchAddFormProps) {
     const { user } = useAuth()
-    const [livestock, setLivestock] = useState<Livestock[]>([])
-    const [_kandangs, setKandangs] = useState<Kandang[]>([])
+
+    // Use offline-aware hooks for dropdown data
+    const { data: livestockData = [] } = useLivestockList()
+    const { data: _kandangs = [] } = useKandangList()
+
+    // Extract livestock list
+    const livestock = livestockData.map((l: any) => ({
+        id: l.id,
+        id_indukan: l.id_indukan,
+        gender: l.gender
+    }))
+
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -64,11 +63,6 @@ export function OffspringBatchAddForm({
         }))
     )
 
-    useEffect(() => {
-        fetchLivestock()
-        fetchKandangs()
-    }, [])
-
     // Update list when quantity changes
     useEffect(() => {
         const currentLength = offspringList.length
@@ -85,20 +79,6 @@ export function OffspringBatchAddForm({
             setOffspringList(offspringList.slice(0, quantity))
         }
     }, [quantity])
-
-    const fetchLivestock = async () => {
-        const { data } = await supabase
-            .from('livestock')
-            .select('id, id_indukan, gender')
-            .eq('status', 'aktif')
-            .order('id_indukan')
-        setLivestock(data || [])
-    }
-
-    const fetchKandangs = async () => {
-        const { data } = await supabase.from('kandang').select('*').order('kandang_code')
-        setKandangs(data || [])
-    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

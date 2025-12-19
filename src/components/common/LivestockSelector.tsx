@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { useState, useMemo } from 'react'
 import { X, AlertCircle } from 'lucide-react'
+import { useLivestockList } from '@/hooks/useQueries'
 
 interface LivestockSelectorProps {
     title: string
@@ -9,58 +9,30 @@ interface LivestockSelectorProps {
     onSelect: (livestockId: string, idIndukan: string, birthDate: string) => void
 }
 
-interface Livestock {
-    id: string
-    id_indukan: string
-    gender: string
-    birth_date: string
-    settings_breeds?: {
-        breed_name: string
-    }
-}
-
 export function LivestockSelector({ title, filterGender, onClose, onSelect }: LivestockSelectorProps) {
-    const [livestock, setLivestock] = useState<Livestock[]>([])
-    const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
 
-    useEffect(() => {
-        fetchLivestock()
-    }, [])
+    // Use offline-aware hook for livestock data
+    const { data: livestockData = [], isLoading: loading } = useLivestockList()
 
-    const fetchLivestock = async () => {
-        try {
-            let query = supabase
-                .from('livestock')
-                .select(`
-                    id,
-                    id_indukan,
-                    gender,
-                    birth_date,
-                    settings_breeds (
-                        breed_name
-                    )
-                `)
-                .eq('status_farm', 'infarm')
-                .order('id_indukan')
+    // Process livestock data with breed info and filter by gender
+    const livestock = useMemo(() => {
+        let filtered = livestockData.filter((l: any) => l.status_farm === 'infarm')
 
-            // Apply gender filter if specified
-            if (filterGender) {
-                query = query.eq('gender', filterGender)
-            }
-
-            const { data, error } = await query
-
-            if (error) throw error
-            setLivestock((data || []) as unknown as Livestock[])
-        } catch (err) {
-            console.error('Error fetching livestock:', err)
-        } finally {
-            setLoading(false)
+        if (filterGender) {
+            filtered = filtered.filter((l: any) => l.gender === filterGender)
         }
-    }
 
-    const filteredLivestock = livestock.filter(item =>
+        return filtered.map((l: any) => ({
+            id: l.id,
+            id_indukan: l.id_indukan,
+            gender: l.gender,
+            birth_date: l.birth_date,
+            settings_breeds: l.settings_breeds
+        }))
+    }, [livestockData, filterGender])
+
+    const filteredLivestock = livestock.filter((item: any) =>
         item.id_indukan.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
